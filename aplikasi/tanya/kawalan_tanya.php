@@ -55,7 +55,7 @@ class Kawalan_Tanya extends Tanya
 				($fe == 'xfe') ?
 				(	($myTable=='rangka14') ?
 					' WHERE c.fe is null '
-					: 	' and c.fe fe is null '
+					: 	' and c.fe is null '
 				):	(
 					($myTable=='rangka14') ?
 					' WHERE c.fe = "' . $fe . '"'
@@ -64,8 +64,8 @@ class Kawalan_Tanya extends Tanya
 			);
 
 		$jadual = ($myTable=='rangka14') ? '`' . $sv . $myTable . '` as c'
-			: $sv . $myTable 
-				. ' b, `mm_rangka14` as c WHERE b.newss = c.newss';
+			: "\r" . $sv . $myTable 
+				. ' as b, `mm_rangka14` as c WHERE b.newss = c.newss';
 
 		$sql = 'SELECT ' . $medan . ' FROM ' . $jadual 
 			. $carife
