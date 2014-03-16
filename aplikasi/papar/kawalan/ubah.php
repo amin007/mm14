@@ -11,7 +11,7 @@ function cariInput($rangka,$kira,$key,$data)
 	$name = 'name="' . $rangka . '[' . $key . ']"';
 	//if ($key=='noahli') $id = $data; 
 	//if ( in_array($key,$textbox) )
-	if ($key=='nota')
+	if ($key=='nota' || $key=='catatan')
 	{//sebab
 		$input = '<textarea ' . $name . ' rows="1" cols="20">' 
 			   . $data . '</textarea>';
@@ -63,7 +63,7 @@ function paparInputBulanan($bulan,$row,$kira,$key,$data)
 		$input = $s1 . $row[$kira]['newss'] . '|<br>'
 			   . $row[$kira]['nama'] . $s2;
 	}
-	elseif ( in_array($key,array('msic','web','staf','outlet')) )
+	elseif ( in_array($key,array('msic','web','staf','outlet','respon')) )
 	{//msic
 		$input = '<input type="text" ' . $name . ' value="' 
 			   . $data . '" class="input-micro" >';
@@ -74,7 +74,7 @@ function paparInputBulanan($bulan,$row,$kira,$key,$data)
 			   . 'class="input-date tarikh" readonly>'
 			   . '<input type="checkbox" ' . $tandaX . ' value="x">';
 	}
-	elseif ($key=='sebab')
+	elseif ($key=='nota')
 	{//sebab
 		$input = '<textarea ' . $name . ' rows="1" cols="20">' 
 			   . $data . '</textarea>';
@@ -295,7 +295,7 @@ foreach ($this->kesID as $myTable => $row)
 <?php
         $bulan = $myTable;
 		// medan yang tak perlu dipaparkan
-		$lepas = array('respon','nama','utama','fe',);
+		$lepas = array('nama','utama','fe',);
 
         //$textbox = array('nota');
         foreach ( $row[$kira] as $key=>$data ) 
