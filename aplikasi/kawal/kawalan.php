@@ -30,12 +30,12 @@ class Kawalan extends Kawal
             'bootstrap-datepicker.css',
             'bootstrap-editable.css');
 			
-        $this->medanRangka = 'c.newss,c.ssm,c.nama,c.fe,msic2008,alamat,'
+        $this->medanRangka = 'newss,ssm,nama,fe,msic2008,alamat,'
 			//. 'concat_ws("<br>",alamat1_lokasi,alamat2_lokasi,poskod_lokasi,bandar_lokasi,ng_lokasi) as alamat,' . "\r"
-			. 'dp,c.tel,c.respon R';
+			. 'dp,tel,respon R';
 			//. 'tel,fax,responden,email,nota,msic08';
-		$this->medanData = 'b.newss,b.nama,b.fe,respon R,msic M6,terima,' . "\r"
-		   . 'hantar,format(gaji,0) gaji,format(staf,0) staf,format(hasil,0) hasil,catatan';
+		$this->medanData = 'b.newss,b.nama,b.fe,b.respon R,b.msic2008 M6,terima,' . "\r"
+		   . 'hantar,format(gaji,0) gaji,format(staf,0) staf,format(hasil,0) hasil,b.nota';
 		$this->sv = 'mm_';
 		$this->pengguna = Sesi::get('namaPegawai');
 		$this->level = Sesi::get('levelPegawai');
@@ -474,7 +474,7 @@ class Kawalan extends Kawal
 			. 'concat(substring(newss,1,3),\' \',substring(newss,4,3),\' \',' 
 			. 'substring(newss,7,3),\' \',substring(newss,10,3),\' | \',' 
 			. 'msic2008) as ' . '`id U M`';
-        $medanData = 'newss,fe,nama,terima,hantar,gaji,staf,hasil,catatan';
+        $medanData = 'newss,fe,nama,terima,hantar,gaji,staf,hasil,respon,nota';
         $sv='mm_'; // survey apa
         $cari['medan'] = 'newss'; // cari dalam medan apa
         $id = isset($cariID) ? $cariID : null; // cari id berasaskan sidap
@@ -514,7 +514,6 @@ class Kawalan extends Kawal
 			}// tamat ulang table
 
             // 2. mula cari $cariID dalam $bulanan
-			/*
             foreach ($bulanan as $key => $myTable)
             {// mula ulang table
                 $this->papar->kesID[$myTable] = 
@@ -531,7 +530,7 @@ class Kawalan extends Kawal
         // isytihar pemboleubah
         //$tajuk2=array('bulan','nama','msic','terima','hasil','dptLain',
         //'web','stok','staf','gaji','sebab','outlet','nota');
-        $tajuk2=array('bulan','nama','terima','hantar','gaji','staf','hasil','catatan');
+        $tajuk2=array('bulan','nama','terima','hantar','gaji','staf','hasil','respon','nota');
         $s1 = '<th><span class="label">';
         $s2 = '</span></th>';
         $this->papar->paparTajuk = null;
@@ -566,7 +565,7 @@ class Kawalan extends Kawal
 		
 		// Set pemboleubah utama
         $this->papar->pegawai = senarai_kakitangan();
-        $this->papar->lokasi = 'MDT 2012 - Ubah';
+        $this->papar->lokasi = 'MM14 - Ubah';
 		
 		// paparkan ke fail kawalan/ubah.php
 		header('location: ' . URL . 'kawalan/ubah/' . $dataID);
@@ -616,12 +615,13 @@ class Kawalan extends Kawal
         
         foreach ($bulanan as $kunci => $jadual)
         {// mula ulang table
-			if($jadual == 'rangka14'):
+			//if($jadual == 'rangka14'):
 				$myTable = $sv . $jadual;
 				$posmen[$myTable]['fe'] = $posmen[$rangka]['fe'];
+				//$posmen[$myTable]['respon'] = $posmen[$rangka]['respon'];
 				$data = $posmen[$myTable];
 				$this->tanya->ubahSimpan($data, $myTable);
-			endif;
+			//endif;
         }// tamat ulang table
         
         //$this->papar->baca('kawalan/ubah/' . $dataID);
