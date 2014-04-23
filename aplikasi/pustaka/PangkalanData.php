@@ -9,7 +9,6 @@ class PangkalanData extends PDO
 		{
 			parent::__construct($DB_TYPE.':host='.$DB_HOST.';dbname='.$DB_NAME, $DB_USER, $DB_PASS);
 			//parent::setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTIONS);
-			//parent::setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
 		}
 		catch (PDOException $e) 
 		{
@@ -29,7 +28,6 @@ class PangkalanData extends PDO
 	public function select($sql, $array = array(), $fetchMode = PDO::FETCH_ASSOC)
 	{
 		//echo '<hr><pre>'; print_r($sql) . '</pre><hr>';
-		$this->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
 		$sth = $this->prepare($sql);
 		foreach ($array as $key => $value) 
 		{
@@ -43,14 +41,18 @@ class PangkalanData extends PDO
 	public function selectAll($sql, $array = array(), $fetchMode = PDO::FETCH_ASSOC)
 	{
 		//echo '<hr><pre>'; print_r($sql) . '</pre><hr>';
-		$this->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
+		//$this->setAttribute(PDO::ATTR_EMULATE_PREPARES,false); 
 		$sth = $this->prepare($sql);
 		foreach ($array as $key => $value) 
 		{
 			$sth->bindValue("$key", $value);
 		}
-		
+
 		$sth->execute();
+		/*
+			$arr = $sth->errorInfo();
+			echo "\nPDOStatement::errorInfo():\n<pre>";
+			print_r($arr) . '</pre>';//*/
 		return $sth->fetchAll($fetchMode);
 	}
 
@@ -65,14 +67,10 @@ class PangkalanData extends PDO
 	public function rowCount($sql, $array = array(), $fetchMode = PDO::FETCH_ASSOC)
 	{
 		//echo '<hr><pre>'; print_r($sql) . '</pre><hr>';
-		$this->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
-		$sth = $this->prepare($sql);
-		foreach ($array as $key => $value) 
-		{
-			$sth->bindValue("$key", $value);
-		}
-		
+		$sth = $this->prepare($sql);	
 		$sth->execute();
+		
+			//echo '<br>$sth->rowCount() = ' . $sth->rowCount() . '<br>';
 		return $sth->rowCount(); //$sth->fetchAll($fetchMode);
 	}
 
@@ -83,38 +81,38 @@ class PangkalanData extends PDO
 	 * @param constant $fetchMode A PDO Fetch mode
 	 * @return mixed
 	 */
-	
+	 
 	public function columnCount($sql, $array = array(), $fetchMode = PDO::FETCH_ASSOC)
 	{
 		//echo '<hr><pre>'; print_r($sql) . '</pre><hr>';
-		$this->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
-		$sth = $this->prepare($sql);
-		foreach ($array as $key => $value) 
-		{
-			$sth->bindValue("$key", $value);
-		}
-		
+		$sth = $this->prepare($sql);	
 		$sth->execute();
+		
+			//echo '<br>$sth->columnCount() = ' . $sth->columnCount() . '<br>';
 		return $sth->columnCount(); //$sth->fetchAll($fetchMode);
 	}
+
 	/**
 	 * insert
 	 * @param string $table A name of table to insert into
 	 * @param string $data An associative array
 	 */
-	public function insert($table, $data)
+	public function insert($sql)
 	{
-		$this->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
+		/*
 		ksort($data);
 		
 		$fieldNames = implode('`, `', array_keys($data));
 		$fieldValues = ':' . implode(', :', array_keys($data));
 		
 		$sth = $this->prepare("INSERT INTO $table (`$fieldNames`) VALUES ($fieldValues)");
+		*/
 		
-		foreach ($data as $key => $value) {
+		$sth = $this->prepare($sql);
+		/*foreach ($data as $key => $value) 
+		{
 			$sth->bindValue(":$key", $value);
-		}
+		}*/
 		
 		$sth->execute();
 	}
@@ -130,9 +128,7 @@ class PangkalanData extends PDO
 	public function update($sql, $array = array(), $fetchMode = PDO::FETCH_ASSOC)
 	{
 		//echo '<hr><pre>'; print_r($sql) . '</pre><hr>';
-		$this->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
 		$sth = $this->prepare($sql);
-		
 		foreach ($array as $key => $value) 
 		{
 			$sth->bindValue("$key", $value);
@@ -149,7 +145,7 @@ class PangkalanData extends PDO
 	 */
 	public function updateOld($table, $data, $where)
 	{
-		$this->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );	
+	
 		ksort($data);
 		
 		$fieldDetails = NULL;
@@ -180,7 +176,6 @@ class PangkalanData extends PDO
 	 */
 	public function delete($table, $where, $limit = 1)
 	{
-		$this->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
 		return $this->exec("DELETE FROM $table WHERE $where LIMIT $limit");
 	}
 	
