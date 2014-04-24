@@ -59,7 +59,7 @@ class Suku1 extends Kawal
 		// papar semua data
 		$this->papar->senaraiData[$this->_jadual] = 
 			$this->tanya->asingSv($this->_jadual, 
-			'subsektor,newss,respon'
+			'subsektor,newss,nossm,respon'
 			. ',concat_ws(\' \',nama,operator) as `kod2`'
 			. ',concat_ws(\'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\',newss,\'QSS2013\',msic2008) as `kod`'
 			. ',concat_ws(\' \',fe,respon,msic2008,utama) as `keputusan`'
@@ -75,7 +75,7 @@ class Suku1 extends Kawal
 		$this->papar->gambar=gambar_latarbelakang('../../');		
 
 		// pergi papar kandungan fungsi papar($this->_folder) dalam KAWAL
-		$this->papar->baca(Kebenaran::papar($this->_folder), 1);
+		$this->papar->baca(Kebenaran::papar($this->_folder), 0);
 	}
 	
 	public function papar($newss) 
