@@ -238,7 +238,8 @@ function lihat($tab,$kini,$papar,$pegawai)
     echo $selit . $tab . "\n" . $tab;
 }
 
-function pencamSqlLimit($bilSemua, $item, $ms)
+function pencamSqlLimit($bilSemua, $item, $ms, 
+	$kumpul = null, $susun = null)
 {
     // Tentukan bilangan jumlah dalam DB:
     $jum['bil_semua'] = $bilSemua; //mysql_num_rows($semua);
@@ -252,7 +253,9 @@ function pencamSqlLimit($bilSemua, $item, $ms)
     $jum['muka_surat'] = ceil($jum['bil_semua'] / $jum['max']);
     // nak tentukan berapa bil jumlah dlm satu muka surat
     $jum['bil'] = $jum['dari']+1; 
-    
+	// susun dan group
+	$jum['kumpul'] = $kumpul; 
+	$jum['susun'] = $susun; 
     return $jum;
 }
 
@@ -287,6 +290,221 @@ function halaman($jum)
 
     return $halaman;
 }// function halaman() - tamat
+
+// cetakF3
+function halamanf3($jum)
+{// function halaman() - mula
+    $mula = '<div style="background-color: #fffaf0; color:black;text-align:center">';
+    $tamat = '</div>';
+    $page = $jum['page'];
+    // Tentukan had query berasaskan nombor halaman semasa.
+    //$jum['dari'] = (($jum['page'] * $jum['max']) - $jum['max']); 
+    // Tentukan bilangan halaman. $jum['muka_surat'] 
+	$jum['max'] = 30; // ubahsuai bil max untuk cetakf3
+	$muka_surat = ceil($jum['bil_semua'] / $jum['max']);
+    $bil_semua = $jum['bil_semua'];
+    $baris_max = $jum['max'];
+            
+    $url = dpt_url();  // sepatutnya kawalan/semua/30/1/amin/
+    $class = ( !isset($url[0]) ) ? null : $url[0]; //'kawalan'; 
+    $fungsi = 'cetakf3'; //( !isset($url[1]) ) ? null : $url[1]; //'semua'; 
+    $batch = ( !isset($url[2]) ) ? null : $url[2]; //'30'; 
+    $item = ( !isset($url[3]) ) ? null : $url[3]; //'30'; 
+    $ms = ( !isset($url[4]) ) ? null : $url[4]; //'ms'; 
+    //$fe = ( !isset($url[4]) ) ? null : $url[4]; //'fe'; 
+    
+    //return "\$batch:$batch|\$bil_semua:$bil_semua|\$baris_max:$baris_max|\$muka_surat:$muka_surat";
+	
+	$senarai = URL . "$class/$fungsi/$batch/$baris_max/";
+    $halaman = "\n$mula\r" 
+		. '<ul class="pagination pagination-sm">' 
+		. "\r<li><a>Bil:($bil_semua) ms($muka_surat)- Papar halaman</a></li>";
+    
+    if($page > 1) // Bina halaman sebelum
+        $halaman .= "\r<li><a href='$senarai" . ($page-1) . "'>&laquo;</a></li>";
+    for($i = 1; $i <= $muka_surat; $i++) // Bina halaman terkini
+        {$halaman .= ($page==$i)? "\r<li><a href='$senarai$i'>($i)</a></li>" : 
+		"\r<li><a href='$senarai$i'>$i</a></li>";}
+    if($page < $muka_surat) // Bina halaman akhir
+        $halaman .= "\r<li><a href='$senarai" . ($page+1) . "'>&raquo;</a></li>";
+        
+    $halaman .= "\n</ul>\n$tamat";
+
+    return $halaman;
+	
+}// function halaman() - tamat
+
+function paparJadualF3_TajukBesar($allRows,$rows,$fields,$kodsv,$nama_penyelia,$nama_pegawai,$item,$ms)
+{
+	## tajuk besar
+	switch ($kodsv):
+		case 'MDT': $SV='PENYIASATAN PERDAGANGAN EDARAN BULANAN'; break;
+		case 'CDT': $SV='BANCI PERDAGANGAN EDARAN'; break;
+		case 'MM':  $SV='PENYIASATAN PEMBUATAN BULANAN'; break;
+		case 'QSS': $SV='PENYIASATAN PERKHIDMATAN SUKU TAHUNAN'; break;
+		case 'MFG':  $SV='PENYIASATAN PEMBUATAN TAHUNAN'; break;
+		case 'SERVIS':  $SV='PENYIASATAN PERKHDIMATAN TAHUNAN'; break;
+		case 'PPPMAS':  $SV='PENYIASATAN PERBELANJAAN UNTUK PELINDUNGAN ALAM SEKITAR'; break;
+		default: $SV=null;
+	endswitch;
+
+	echo '<td colspan=' . ($fields+1) . '><font size=2>' .
+		//'<div align="right">Lampiran 3<br>F 3 </div>' .
+		'<div align="right">Lampiran A : F3 </div>' .
+		'<div align="center">' .
+		'JABATAN PERANGKAAN MALAYSIA NEGERI JOHOR' .
+		'<br>SENARAI INDUK AGIHAN KES ANGGOTA ' .
+		'<br>' . $SV . ' ' . date('Y') .
+		'</div><br><div align="left">' .
+		"Nama Penyelia : $nama_penyelia" .
+		'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' .
+		'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' .
+		"Nama FE : $nama_pegawai ($allRows kes)" .
+		"(muka $ms dari " . ($item*$ms) . ")" .
+		'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' .
+		'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' .
+		'Tarikh : <u>' . (date('d')) .
+		(date('/m/Y')) . '</u> ' .
+		'</div></font></td>' . "\r";
+
+}
+
+function paparJadualF3_TajukMedan($sv,$nama_penyelia,$nama_pegawai,$allRows,$rows,$fields,$hasil,$item,$ms)
+{
+	## tajuk besar
+	echo '<tr style="page-break-before:always">';
+	paparJadualF3_TajukBesar($allRows,$rows,$fields,$sv,$nama_penyelia,$nama_pegawai,$item,$ms);
+	echo '</tr>';
+	
+	## tajuk medan - keputusan 
+		echo '<tr>';
+	echo "\n<th rowspan=2>Bil</th>\n";
+	echo '<th rowspan=2>Nama Syarikat (KES ' . $nama_pegawai . ')</th>' . "\n";
+	echo '<th rowspan=2>Kod Peny.</th>' . "\n";
+	echo '<th rowspan=1>BBU</th>' . "\n";
+	echo '<th rowspan=2>NO SIRI NEWSS</th>' . "\n";
+	echo '<th rowspan=2>NOTA/CATATAN</th>' . "\n";
+	echo '<th colspan=22>Diisi oleh Anggota Kerja Luar sahaja</th>' . "\n";
+	
+	// bawah 	
+	echo '<tr>';
+	echo '<th>SBU</th>' . "\n";
+	foreach ($hasil[0] as $kunci => $dataan)
+	{
+		echo (in_array($kunci,array('nama','sv','utama','newss','nota')))?  
+		'':'<th>'.$kunci.'</th>' . "\n";	
+	}
+	echo '</tr>';
+
+}
+
+function paparJadualF3_TajukMedan1($nama_pegawai=null)
+{
+	## tajuk medan - keputusan 
+	echo "<tr>\n<th rowspan=2>Bil</th>\n";
+	echo '<th rowspan=2>Nama Syarikat</th>' . "\n";
+	echo '<th rowspan=2>Kod Peny.</th>' . "\n";
+	echo '<th rowspan=1>BBU</th>' . "\n";
+	echo '<th rowspan=2>NO SIRI NEWSS</th>' . "\n";
+	echo '<th colspan=22>Diisi oleh Anggota Kerja Luar sahaja</th>' . "\n";
+	echo "</tr>\n";
+	
+}
+function paparJadualF3_TajukMedan2($nama_pegawai,$rows,$fields,$hasil,$item,$ms)
+{
+	// nilai dari tajuk
+	echo '<tr>';
+	echo '<th>SBU</th>' . "\n";
+	foreach ($hasil[0] as $kunci => $dataan)
+	{
+		echo (in_array($kunci,array('nama','sv','utama','newss')))?  
+		'':'<th>'.$kunci.'</th>' . "\n";	
+	}
+	echo '</tr>';
+
+}
+function paparJadualF3_TajukBawah($rows,$fields)
+{
+	## pecah muka surat
+	//$cetak=($bil==$rows)?'style="page-break-after:always">':'>';
+	$cetak='style="page-break-after:always">';
+	echo '<tr style="page-break-after:always"><td colspan=' . ($fields+1) . '>' .
+		'<p align=left><font size=2>' .
+		'<br>A) Laporan kawalan harian ini merujuk kepada arahan Pengarah pada mesyuarat Pemantauan' .
+		'<br>B) Sila kemaskini laporan ini setiap hari dan failkan mengikut turutan tarikh oleh FE' .
+		'<br>C) Tarikh laporan ini bersamaan tarikh kerja luar pada F2 syarikat yang disenaraikan' .
+		'<br>D) Laporan ini tidak perlu diisi oleh FE jika tiada kerja luar / telefon dsb' .
+		'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' .
+		'</font></p></td></tr>' . "\r";
+}
+function paparJadualF3_Data($sv,$nama_penyelia,$nama_pegawai,$allRows,$rows,$fields,$hasil,$item,$ms)
+{	
+	// nak cari $rows
+	if ($rows=='0'): echo "\n";
+	else: // mula kalau jumpa
+		# PEMBOLEH UBAH
+		$highlight="onmouseover=\"this.className='tikusatas';\" onmouseout=\"this.className='tikuslepas1';\"";
+		$highlight2=" onmouseover=\"this.className='tikusatas';\" onmouseout=\"this.className='tikuslepas2';\"";
+	
+		// nilai dari isi
+		$jum = array();
+		
+		foreach ($hasil as $kira => $nilai)
+		{
+			//$mula = ($ms==1) ? $ms : ($ms*$item)-$ms;
+			// style="page-break-after:always"
+			if ($kira%'30'=='0')
+			{
+				echo paparJadualF3_TajukMedan($sv,$nama_penyelia,$nama_pegawai,$allRows,$rows,$fields,$hasil,$item,$ms);
+				echo "<tr><td><a target='_blank' href='"
+				. URL . 'kawalan/ubah/'
+				. $nilai['newss']."'>".($kira+1)."</a></td>\n";
+
+			}
+			else
+			{
+				echo "<tr><td><a target='_blank' href='"
+				. URL . 'kawalan/ubah/'
+				. $nilai['newss']."'>".($kira+1)."</a></td>\n";		
+			}
+			foreach ($nilai as $key => $data)
+			{
+				echo '<td>' . $data . '</td>';
+				//echo '<td>' . $key . ' | ' . $data . '</td>';
+				//if (!in_array($key,array('nama','sv','utama','newss')))
+					//$key['jum'] .= $data;
+			}echo "</tr>\n";
+/*			if ($kira%'30'=='0')
+			{
+				echo '</tr>';
+				echo paparJadualF3_TajukMedan($rows,$fields,$hasil,$item,$ms);
+			}
+			else
+			{
+				
+			
+			}
+*/
+		}
+
+		## tajuk bawah - bil, jumlah besar, utama, newss, A1-B7
+			echo "<tr>\n";// dptkan nama medan
+			echo '<th>&nbsp;</th>' . "\n";
+			echo '<th colspan=2>Jumlah Besar</th>' . "\n";
+			echo '<th>&nbsp;</th>' . "\n";
+			echo '<th>&nbsp;</th>' . "\n";
+			foreach ($hasil[0] as $key => $kunci)
+			{
+				//echo '<th>&nbsp;</th>' . "\n";	
+				echo (in_array($key,array('nama','sv','utama','newss')))?  
+				'':'<th>' . $kunci . '</th>' . "\n";	
+			}
+			echo "</tr>\n";
+
+	endif;
+	return $jum;
+}
+
 
 function cariMedanInput($ubah,$f,$row,$nama) 
 {/* mula -
