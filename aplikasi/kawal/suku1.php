@@ -51,10 +51,12 @@ class Suku1 extends Kawal
 		$this->papar->baca($fail);
 	}
 
-	public function asing($medanID, $cariID) 
+	public function asing($medanID, $cariID, $cetak = 'cetak') 
 	{	//echo 'class qss4 fungsi index()<br>';		
-		$cari = array('medan' => $medanID,
-			'operator' => '=','id' => $cariID);
+		$cari[] = array('fix'=>'x','atau'=>'WHERE',
+			'medan'=>$medanID,'apa'=>$cariID);
+		$susun[] = array('susun'=>'subsektor,newss',
+			'dari'=>'0','max'=>'30');
 
 		// papar semua data
 		$this->papar->senaraiData[$this->_jadual] = 
@@ -65,27 +67,62 @@ class Suku1 extends Kawal
 			. ',concat_ws(\' \',fe,respon,msic2008,utama) as `keputusan`'
 			. ',concat_ws(\' \',alamat1,alamat2,poskod,bandar) as `alamat penuh`' 
 			//. ',concat_ws(\'\',utama,msic2008,ngdbbp) as kod3'
-			. '',$cari);
+			. '',$cari,$susun);
 		$this->papar->medanID ='newss';
 		//echo '<pre>$senaraiData->', print_r($this->papar->senaraiData, 1) . '</pre>';# papar $senaraiData
 		
 		// Set pemboleubah utama
+		$this->papar->cetak = 'cetak';
 		$this->papar->pegawai = senarai_kakitangan();
 		$this->papar->Tajuk_Muka_Surat='qss 2014';
 		$this->papar->gambar=gambar_latarbelakang('../../');		
 
 		// pergi papar kandungan fungsi papar($this->_folder) dalam KAWAL
-		$this->papar->baca(Kebenaran::papar($this->_folder), 0);
+		$this->papar->baca(Kebenaran::papar($this->_folder), 1);
+	}
+
+	public function cetakf3($medanID, $cariID, $cetak = 'cetak') 
+	{
+		# kiraKes dulu
+		$item = 30; $ms = 1;
+		$jadual = $this->_jadual;
+		//$carian[] = array('fix'=>'x','atau'=>'WHERE','medan'=>'batchAwal','apa'=>$cariBatch);
+		$carian[] = array('fix'=>'x','atau'=>'WHERE',
+			'medan'=>$medanID,'apa'=>$cariID);
+		$susun[] = array('susun'=>'subsektor,newss',
+			'dari'=>'0','max'=>'30');
+
+		$bilSemua = $this->tanya->kiraBaris($jadual, $medan = '*', $carian);
+		# tentukan bilangan mukasurat. bilangan jumlah rekod
+		//echo '$bilSemua:' . $bilSemua . ', $item:' . $item . ', $ms:' . $ms . '<br>';
+		$jum = pencamSqlLimit($bilSemua, $item, $ms, null, 'subsektor,newss');
+
+		# kumpul respon
+		$kumpul = $this->tanya->kumpulRespon('kod','f2','respon',
+			$medan = "nama, sv as 'sv', utama, newss",$jadual,$carian,$jum);
+		//echo '<pre>$kumpul:'; print_r($kumpul) . '</pre>';
+		$this->papar->kiraBaris = $kumpul['kiraBaris'];
+		$this->papar->kiraMedan = $kumpul['kiraMedan'];
+		$this->papar->hasil = $kumpul['kiraData'];
+
+		# Set pemboleubah utama
+        $this->papar->pegawai = senarai_kakitangan();
+        $this->papar->lokasi = 'QSS : FE';
+		
+		 # pergi papar kandungan
+		//echo '<br>location: ' . URL . "batchawal/semak/$cariBatch/$dataID" . '';
+		$this->papar->baca('kawalan/cetakf3', 1);
 	}
 	
+		
 	public function papar($newss) 
 	{	
 		if ( is_numeric($newss) )
-			$cari = array('medan' => 'newss',
-			'operator' => '=','id' => $newss);
+			$cari[] = array('fix'=>'x','atau'=>'WHERE',
+				'medan'=>'newss','apa'=>$cariID);
 		else
-			$cari = array('medan' => 'fe',
-			'operator' => '<>','id' => 'semak');
+			$cari[] = array('fix'=>'x','atau'=>'WHERE',
+				'medan'=>'fe','apa'=>'semak');			
 		
 		// papar semua data
 		$this->papar->senaraiData[$this->_jadual] = 
@@ -224,9 +261,8 @@ class Suku1 extends Kawal
 		$myTable = $this->_jadual;
 		
 		// set dalam KAWAL sahaja
-		$cari['medan'] = $medanID;
-		$cari['id'] = $cariID;
-		$noAhli = $this->tanya->noAhli($myTable, '*', $cari);
+		$cari[] = array('fix'=>'x','atau'=>'WHERE','medan'=>$medanID,'apa'=>$cariID);
+		$noAhli = $this->tanya->cariSatu($myTable, '*', $cari);
 		$paparMedan[$myTable] = $this->tanya->paparMedan($myTable);
 
 		// dapatkan nama_medan,jenis_medan,input_medan dlm class Borang::ubah()
@@ -241,7 +277,7 @@ class Suku1 extends Kawal
 				
 		// Set pemboleubah utama
 		$this->papar->pegawai = senarai_kakitangan();
-		$this->papar->Tajuk_Muka_Surat='MM 2012';
+		$this->papar->Tajuk_Muka_Surat='QSS 2014';
 		$this->papar->gambar=gambar_latarbelakang('../../');
 
 		// pergi papar kandungan
