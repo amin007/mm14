@@ -298,10 +298,15 @@ foreach ($this->kesID as $myTable => $row)
 		$lepas = array('nama','utama','fe',);
 
         //$textbox = array('nota');
+		//in_array($key,array('gaji','staf','hasil'))
         foreach ( $row[$kira] as $key=>$data ) 
         {
             $input = paparInputBulanan($bulan,$row,$kira,$key,$data);
-            $papar_data = ($data==null) ? '' : '<span class="label">' . $data . '</span>';
+            $papar_data = ($data==null) ? '' : 
+				(	in_array($key,array('gaji','staf','hasil')) ?
+						'<span class="label">' . kira($data) . '</span>'
+						:'<span class="label">' . $data . '</span>'
+				);
             echo (in_array($key,$lepas)) ? '' : 
             (    ($key == 'newss') ?
                 '<td>' . $input . '</td>' : // kalau bukan $key==newss                

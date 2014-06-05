@@ -10,19 +10,20 @@ if(isset($_GET['cari']))
 	$queryString = $_GET['cari'];		
 	if(strlen($queryString) > 0) 
 	{
-	$myTable='mm_rangka14';
-	$query = "SELECT newss,nama,ssm,fe,respon FROM $myTable 
-	WHERE concat(newss,nama) like '%$queryString%' LIMIT 30";
-	$result = mysql_query($query) or die(mysql_error()."<hr>$query<hr>");
-	$fields=mysql_num_fields($result); $rows = mysql_num_rows($result);
-	
-		if($rows==0) {echo '<li onClick="fill(\'-\');">Takde Laa</li>';}
-		else
-		{
-		while($row = mysql_fetch_array($result))
-		{echo '<li onClick="fill(\''.$row[0].'\');">'.$row[1].'-'.
-		$row[0].'-'.$row[2].'-'.$row[3].'</li>';}
-		}
+
+		//$query = "SELECT newss,nama,ssm,fe,respon FROM mm_rangka14
+		$query = "SELECT newss,nama,nossm,fe,respon FROM ejobb14_q1
+		WHERE concat(newss,nama) like '%$queryString%' LIMIT 30";
+		$result = mysql_query($query) or die(mysql_error()."<hr>$query<hr>");
+		$fields=mysql_num_fields($result); $rows = mysql_num_rows($result);
+		
+			if($rows==0) {echo '<li onClick="fill(\'-\');">Takde Laa</li>';}
+			else
+			{
+				while($row = mysql_fetch_array($result))
+				{echo '<li onClick="fill(\''.$row[0].'\');">'.$row[1].'-'.
+				$row[0].'-'.$row[2].'-'.$row[3].'</li>';}
+			}
 	}
 }
 ?>
