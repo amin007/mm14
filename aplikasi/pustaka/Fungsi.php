@@ -342,6 +342,7 @@ function paparJadualF3_TajukBesar($allRows,$rows,$fields,$kodsv,$nama_penyelia,$
 		case 'CDT': $SV='BANCI PERDAGANGAN EDARAN'; break;
 		case 'MM':  $SV='PENYIASATAN PEMBUATAN BULANAN'; break;
 		case 'QSS': $SV='PENYIASATAN PERKHIDMATAN SUKU TAHUNAN'; break;
+		case 'EJOB': $SV='PENYIASATAN GUNA TENAGA SUKU TAHUNAN'; break;
 		case 'MFG':  $SV='PENYIASATAN PEMBUATAN TAHUNAN'; break;
 		case 'SERVIS':  $SV='PENYIASATAN PERKHDIMATAN TAHUNAN'; break;
 		case 'PPPMAS':  $SV='PENYIASATAN PERBELANJAAN UNTUK PELINDUNGAN ALAM SEKITAR'; break;
@@ -502,7 +503,7 @@ function paparJadualF3_Data($sv,$nama_penyelia,$nama_pegawai,$allRows,$rows,$fie
 			echo "</tr>\n";
 
 	endif;
-	return $jum;
+	
 }
 
 
@@ -803,6 +804,21 @@ function bersih($papar)
 	
     return $papar;
 }
+
+function bersihGET($papar) 
+{
+	# bersih untuk $_GET sahaja
+	$paparHTML = filter_input(INPUT_GET, $papar, FILTER_SANITIZE_SPECIAL_CHARS);
+	$paparURL = filter_input(INPUT_GET, $papar, FILTER_SANITIZE_ENCODED);
+	//$papar = filter_var($_GET[$papar], FILTER_SANITIZE_URL);
+	
+	//echo "You have searched for $paparHTML.\n";
+	//echo "<a href='?search=$paparURL'>Search again.</a>";
+    
+    //return $papar;
+    return $paparHTML;
+}
+
 
 function gambar_latarbelakang($lokasi)
 {
