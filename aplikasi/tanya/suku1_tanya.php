@@ -7,6 +7,80 @@ class Suku1_Tanya extends Tanya
 	{
 		parent::__construct();
 	}
+// carian global untuk fungsi
+	private function dimana($carian)
+	{
+		$where = null;
+		if($carian==null || empty($carian) ):
+			$where .= null;
+		else:
+			foreach ($carian as $key=>$cari)
+			{
+					 $atau = isset($carian[$key]['atau'])  ? $carian[$key]['atau'] . ' ' : null;
+				$cariMedan = isset($carian[$key]['medan']) ? $carian[$key]['medan']      : null;
+					  $fix = isset($carian[$key]['fix'])   ? $carian[$key]['fix']        : null;			
+				  $cariApa = isset($carian[$key]['apa'])   ? $carian[$key]['apa']        : null;
+				//echo "\r$key => ($fix) $atau $cariMedan = '$cariApa'  ";
+				
+				if ($cariApa==null) 
+					$where .= " $atau`$cariMedan` is null\r";
+				elseif($fix=='x')
+					$where .= " $atau`$cariMedan`='$cariApa'\r";
+				else
+					$where .= " $atau`$cariMedan` like '%$cariApa%'\r";	
+			}
+		endif;
+	
+		return $where;
+	
+	}
+
+	private function dibawah($carian)
+	{
+		$order = null;
+		if($carian==null || empty($carian) ):
+			$order .= null;
+		else:
+			foreach ($carian as $key=>$cari)
+			{
+				$kumpul = isset($cari['kumpul'])? $cari['kumpul']: null;
+				 $susun = isset($cari['susun']) ? $cari['susun'] : null;
+				  $dari = isset($cari['dari'])  ? $cari['dari']  : null;			
+				   $max = isset($cari['max'])   ? $cari['max']   : null;
+			}
+				$order .= ($kumpul==null) ? '' : " GROUP BY $kumpul\r";
+				$order .= ($susun==null) ? '' : " ORDER BY $susun\r";
+				$order .= ($max==null) ? '' : 
+					(($dari==null) "LIMIT $max" : " LIMIT $dari,$max\r");
+
+		endif;
+	
+		return $order;		
+	}
+	
+	public function kiraMedan($myTable, $medan, $carian)
+	{
+		$sql = 'SELECT ' . $medan . ' FROM ' . $myTable 
+			. $this->dimana($carian);
+		
+		//echo $sql . '<br>';
+		$result = $this->db->columnCount($sql);
+		//echo json_encode($result);
+		
+		return $result;
+	}
+
+	public function kiraBaris($myTable, $medan, $carian)
+	{
+		$sql = 'SELECT ' . $medan . ' FROM ' . $myTable 
+			. $this->dimana($carian);
+		
+		//echo $sql . '<br>';
+		$result = $this->db->rowCount($sql);
+		//echo json_encode($result);
+		
+		return $result;
+	}
 
 	public function paparMedan($myTable)
 	{
@@ -15,20 +89,44 @@ class Suku1_Tanya extends Tanya
 		return $this->db->selectAll($sql);
 	}
 
-	public function paparSemuaData($myTable)
+// ubahsuai fungsi untuk carian tertentu	
+	public function kumpulRespon($medanR, $f2, $r = 'respon', 
+		$medan, $myTable, $carian, $jum)
+	// kumpulRespon('kod','f2',$jadual,$carian,$jum);
 	{
-		$sql = 'SELECT * FROM ' . $myTable;
-		//echo $sql . '<br>';
-		return $this->db->selectAll($sql);
+		$sql = 'SELECT ' . $medanR . ' FROM ' . $f2 
+			 . ' WHERE kod not in ("X","5P") GROUP BY 1 ORDER BY no';
+		$hasil = $this->db->selectAll($sql);
+		
+		/*** loop over the object directly ***/
+		$kumpul = null;
+		foreach($hasil as $key=>$val)
+		{
+			foreach($val as $key2=>$p)
+			{
+				//echo "$p<br>";
+				//$kumpul .= ",\r '' as '" . $p . "'";
+				$kumpul .= ",\r if($r='".$p."','X','&nbsp;') as '" . $p . "'";
+				//$jumlah_kumpul.="+count(if($r='".$papar[0]."' and b.terima is not null,$r,null))\r";
+			}
+		} //echo '<pre>$kumpul:'; print_r($kumpul) . '</pre>';
+		
+		# sql kedua
+		$sql2 = "SELECT $medan$kumpul\r"
+			. ' FROM ' . $myTable . $this->dimana($carian)
+			. ' ORDER BY '. $jum['susun']
+			. ' LIMIT ' . $jum['dari'] . ', ' . $jum['max'];
+		
+		//echo '<pre>' . $sql2 . '</pre><br>';
+		$result['kiraBaris'] = $this->db->rowCount($sql2);
+		$result['kiraMedan'] = $this->db->columnCount($sql2);
+		$result['kiraData'] = $this->db->selectAll($sql2);
+		//echo json_encode($result);
+		
+		return $result;		
+		
 	}
-	
-	public function paparMedanTerpilih($myTable, $medan = '*')
-	{
-		$sql = 'SELECT ' . $medan . ' FROM ' . $myTable;
-		//echo $sql . '<br>';
-		return $this->db->selectAll($sql);
-	}
-	
+
 	public function paparIkutSurvey($myTable)
 	{
 		$sql = 'SELECT subsektor,count(*) as kira FROM ' . $myTable
@@ -37,138 +135,46 @@ class Suku1_Tanya extends Tanya
 		return $this->db->selectAll($sql);
 	}
 
-	public function paparData($myTable, $medan = '*', $cari)
+	public function asingSv($myTable, $medan = '*', $carian, $susun = null)
 	{
-		$cariMedan = ( !isset($cari['medan']) ) ? '' : $cari['medan'];
-		$cariID = ( !isset($cari['id']) ) ? '' : $cari['id'];
-		
-		$sql = 'SELECT ' . $medan . ' FROM ' . 	$myTable . 
-			' WHERE ' . $cariMedan . ' = "' . $cariID . '" ';
-		
-		//echo $sql . '<br>';
-		$result = $this->db->selectAll($sql);
-		//echo json_encode($result);
-		
-		return $result;
-	}
-	
-	public function asingSv($myTable, $medan = '*', $cari)
-	{
-		$cariMedan = ( !isset($cari['medan']) ) ? '' : $cari['medan'];
-		$b = ( !isset($cari['operator']) ) ? '<>' : $cari['operator'];
-		$cariID = ( !isset($cari['id']) ) ? '' : $cari['id'];
-		
 		$sql = 'SELECT ' . $medan . ' FROM ' . 	$myTable 
-			 . ' WHERE ' . $cariMedan . ' ' . $b 
-			 . ' "' . $cariID . '" '
-			 . ' ORDER BY subsektor,newss';
+			 . $this->dimana($carian)
+			 . $this->dibawah($susun);
 		
-		//echo $medan . '<hr>' . $sql . '<br>';
-		$result = $this->db->selectAll($sql);
-		//echo json_encode($result);
-		
-		return $result;
-	}
-
-	public function paparPOM($myTable, $medan = '*', $cari)
-	{
-		$cariMedan = ( !isset($cari['medan']) ) ? '' : $cari['medan'];
-		$b = ( !isset($cari['operator']) ) ? '<>' : $cari['operator'];
-		$cariID = ( !isset($cari['id']) ) ? '' : $cari['id'];
-		
-		$sql = 'SELECT ' . $medan . ' FROM ' . 	$myTable . 
-			' WHERE ' . $cariMedan . ' ' . $b . 
-			' "' . $cariID . '" ';
-		
-		//echo $medan . '<hr>' . $sql . '<br>';
+		//echo '<br>' . $sql . '<hr>';
 		$result = $this->db->selectAll($sql);
 		//echo json_encode($result);
 		
 		return $result;
 	}
 	
-	public function cariBanyakMedan($myTable, $medan, $kira, $had)
+	public function cariBanyak($myTable, $medan, $carian, $susun = null)
 	{
-		$sql ="\rSELECT $medan FROM `$myTable` WHERE \r";
-		
-		foreach ($_POST['pilih'] as $key=>$cari)
-		{
-			$apa = $_POST['cari'][$key];
-			$f = isset($_POST['fix'][$key]) ? $_POST['fix'][$key] : null;
-			$atau = isset($_POST['atau'][$key]) ? $_POST['atau'][$key] : null;
-			
-			//$sql.="\r$key => $f  | ";
+		$sql = 'SELECT ' . $medan . ' FROM ' . $myTable 
+			 . $this->dimana($carian)
+			 . $this->dibawah($susun);
 
-			if ($apa==null) 
-				$sql .= "$atau $cari is null\r";
-			elseif ($myTable=='msic2008') 
-			{
-				if ($cari=='msic') $sql.=($f=='x') ?
-				"$atau ($cari='$apa' or msic2000='$apa')\r" :
-				"$atau ($cari like '%$apa%' or msic2000 like '%$apa%')\r";
-				else $sql.=($f=='x') ?
-				"$atau ($cari='$apa' or notakaki='$apa')\r" :
-				"$atau ($cari like '%$apa%' or notakaki like '%$apa%')\r";
-			}
-			else 
-				$sql.=($f=='x') ? "$atau `$cari`='$apa'\r" : 
-				"$atau `$cari` like '%$apa%'\r";					
-		}
-		
-		$sql.="LIMIT $had ";
 		//echo $sql . '<br>';
-		return $this->db->selectAll($sql);
-	
+		$result = $this->db->selectAll($sql);
+		//echo json_encode($result);
+		
+		return $result;
 	}
-	
-	public function cariSatuSahaja($myTable, $medan, $cari)
+
+	public function cariSatu($myTable, $medan, $carian, $susun = null)
 	{
-	
-		$cariMedan = ( !isset($cari['medan']) ) ? '' : $cari['medan'];
-		$cariID = ( !isset($cari['id']) ) ? '' : $cari['id'];
-		
-		$sql = 'SELECT ' . $medan . ' FROM ' . 	$myTable . 
-			' WHERE ' . $cariMedan . ' = "' . $cariID . '" ';
-		
-		//echo $sql . '<br>';
+		$sql = 'SELECT ' . $medan . ' FROM ' . $myTable 
+			 . $this->dimana($carian)
+			 . $this->dibawah($susun);			 
+
+		 //echo $sql . '<br>';
 		$result = $this->db->select($sql);
 		//echo json_encode($result);
 		
 		return $result;
 	}
-
-	public function cariBanyak($myTable, $medan, $cari)
-	{
 	
-		$cariMedan = ( !isset($cari['medan']) ) ? '' : $cari['medan'];
-		$cariID = ( !isset($cari['id']) ) ? '' : $cari['id'];
-		
-		$sql = 'SELECT ' . $medan . ' FROM ' . 	$myTable . 
-			' WHERE ' . $cariMedan . ' like "%' . $cariID . '%" ';
-		
-		//echo $sql . '<br>';
-		$result = $this->db->selectAll($sql);
-		//echo json_encode($result);
-		
-		return $result;
-	}
-
-	public function noAhli($myTable, $medan, $cari)
-	{
-	
-		$cariMedan = ( !isset($cari['medan']) ) ? '' : $cari['medan'];
-		$cariID = ( !isset($cari['id']) ) ? '' : $cari['id'];
-		
-		$sql = 'SELECT ' . $medan . ' FROM ' . 	$myTable . 
-			' WHERE ' . $cariMedan . ' = "' . $cariID . '" ';
-		
-		//echo $sql . '<br>';
-		$result = $this->db->select($sql);
-		//echo json_encode($result);
-		
-		return $result;
-	}
-
+// untuk crud - create/read/update/delete
 	public function tambahSimpan($data, $jadual)
 	{
 		//echo '<pre>$data->', print_r($data, 1) . '</pre>';
