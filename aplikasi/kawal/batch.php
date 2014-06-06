@@ -34,8 +34,22 @@ class Batch extends Kawal
 			. ' substring(1,5, `YR_MSIC_ID`) msic2008, subsektor,'
 			. 'concat_ws("<br>",alamat1,alamat2,poskod,bandar) as alamat' . "\r";
 			//. 'tel,fax,responden,email,nota';
-		$this->medanData = 'b.newss,b.nama,b.fe,c.respon R,terima,' . "\r"
-		   . 'hantar,format(gaji,0) gaji,format(staf,0) staf,format(hasil,0) hasil,catatan';
+		$this->medanData = 'newss,'
+			. 'concat_ws("<br>",nama,operator,alamat1,alamat2,poskod,bandar) as nama,'
+			. 'batchAwal fe,respon,' //substring(`YR_MSIC_ID`,1,5) msic,'
+			. 'nota, "" tentang_staf,'  . "\r"
+			. ' concat_ws("</td></tr>\r\t<tr><td>",' . "\r"
+			. ' 	concat_ws("</td><td>","pengurusan",bil_pengurusan,gaji_pengurusan),' . "\r"
+			//. ' 	concat("\r<tr><td>"),' . "\r"
+			. ' 	concat_ws("</td><td>","juruteknik",bil_juruteknik,gaji_juruteknik),' . "\r"
+			. ' 	concat_ws("</td><td>","kerani",bil_kerani,gaji_kerani),' . "\r"
+			. ' 	concat_ws("</td><td>","operatif",bil_operatif,gaji_operatif),' . "\r"
+			. ' 	concat_ws("</td><td>","asas",bil_asas,gaji_asas)' . "\r"
+			//. '		concat(),'
+ 			. ' ) as bil_staf'
+			. "\r";
+			//'b.newss,b.nama,b.fe,c.respon R,terima,' . "\r"
+		   //. 'hantar,format(gaji,0) gaji,format(staf,0) staf,format(hasil,0) hasil,catatan';
 		$this->pengguna = Sesi::get('namaPegawai');
 		$this->level = Sesi::get('levelPegawai');
     }
@@ -178,24 +192,22 @@ class Batch extends Kawal
          * $ms = 1 // set $ms = mula surat bermula dengan 1
          * $cariBatch = null // set $cariBatch = tiada | atau untuk pegawai kerja luar
          */
-        # setkan pembolehubah untuk $this->tanya sql1
+        # setkan pembolehubah untuk $this->tanya sql 1
 			$myTable = 'ejob14_q1';
-            $medan = 'newss,nossm,concat_ws("<br>",nama,operator) as nama,batchAwal,respon,'
-			. ' substring(1,5, `YR_MSIC_ID`) msic2008, subsektor,'
-			. 'concat_ws("<br>",alamat1,alamat2,poskod,bandar) as alamat' . "\r";
+            $medan = $this->medanData; 
 			$cari[] = array('fix'=>'x=','atau'=>'WHERE','medan'=>'batchAwal','apa'=>$cariBatch,'akhir'=>'');
 			//$cari[] = array('fix'=>'%like%','atau'=>'AND','medan'=>'dp_baru','apa'=>$cariSemua,'akhir'=>'');
 		# sql 1
             # dapatkan bilangan jumlah rekod
             $bilSemua = $this->tanya->kiraKes($myTable, $medan, $cari);
             # tentukan bilangan mukasurat & bilangan jumlah rekod
-            $jum = pencamSqlLimit($bilSemua, $item, $ms);
+            $jum = pencamSqlLimit($bilSemua, $item, $ms, null);
             # sql guna limit
             $this->papar->cariApa[$myTable] = $this->tanya->
-				cariGroup($myTable, $medan, $cari, $jum);
+				kesBatchAwal($myTable, $medan, $cari, $jum);
 		# setkan pembolehubah untuk $this->tanya sql2
 			$paparTable = $cariBatch;
-			$jadual = $this->jadualKawal[0];
+			$jadual = 'ejob14_q1';
 			$jadualMedan2 = 'batchAwal, count(*)as jum';
 			$cari2[] = array('fix'=>'like','atau'=>'WHERE','medan'=>'batchAwal','apa'=>$cariBatch);
         # mula cari jadual khas
@@ -203,7 +215,7 @@ class Batch extends Kawal
             $jum2 = pencamSqlLimit($bilSemua, $item = 500, $ms, 'batchAwal', 'batchAwal');
             # sql guna limit
             $this->papar->cariApa[$paparTable] = $this->tanya->
-				kesBatchAwal($jadual, $jadualMedan2, $cari2, $jum2);
+				cariGroup($jadual, $jadualMedan2, $cari2, $jum2);
 		//*/
         # semak pembolehubah $this->papar->cariApa
 		//echo '<pre>$this->papar->cariApa:', print_r($this->papar->cariApa, 1) . '</pre><br>';
@@ -214,6 +226,7 @@ class Batch extends Kawal
         $this->papar->carian = 'alamat';
         $this->papar->_cariBatch = $cariBatch;
         $this->papar->_cariSemua = $cariSemua;
+        $this->papar->error = null; # kalau ada error laa
         # pergi papar kandungan
         $this->papar->baca('kawalan/respon', 0);
     }
@@ -222,7 +235,10 @@ class Batch extends Kawal
     {
         $posmen = array();
         $medanID = 'newss';
-		$medanUbah = array('respon');
+		$medanUbah = array('respon','nota',
+			'bil_pengurusan','bil_juruteknik','bil_kerani','bil_operatif','bil_asas',
+			'gaji_pengurusan','gaji_juruteknik','gaji_kerani','gaji_operatif','gaji_asas'
+		);
 		$myTable = 'ejob14_q1';
         foreach ($_POST as $namaMedan => $value)
         {
@@ -251,9 +267,9 @@ class Batch extends Kawal
         # pergi papar kandungan
 		//alamat($item = 30, $ms = 1, $cariBatch = null, $cariSemua = null, $kawasan = null) 
 		$cariBatch = $_POST['batchAwal'];
-		$cariSemua = $_POST['cariSemua'];
-		//echo 'location: ' . URL . "paparan/alamat/10/1/$cariBatch/$cariSemua";
-        header('location: ' . URL . "paparan/ubah/10/1/$cariBatch/$cariSemua");
+		$cariSemua = '/' . $_POST['cariSemua'];
+		//echo 'location: ' . URL . "/batch/ubah/10/1/$cariBatch$cariSemua";
+        header('location: ' . URL . "batch/ubah/10/1/$cariBatch$cariSemua");
  //*/      
     }
 		
