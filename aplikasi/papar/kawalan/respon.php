@@ -14,7 +14,7 @@ else
 <h1>Ubah BatchAwal : <?=$cariBatch?><br>
 <small>Nota: <?=$this->error?></small></h1>
 <?php if ($cariBatch != null):?>
-<form method="POST" action="<?php echo URL ?>paparan/ubahSimpan/">
+<form method="POST" action="<?php echo URL ?>batch/ubahSimpan/">
 <?php else: echo null; endif; 
 
 foreach ($this->cariApa as $myTable => $row)
@@ -59,32 +59,76 @@ for ($kira=0; $kira < count($row); $kira++)
 			$id = $data; 
 			$k1 = URL . 'kawalan/ubah/' . $id;
 			$class = 'btn btn-primary btn-mini';
-			?><td><?php echo $data ?></td><?php
+			?><td><?php echo $data ?></td><?php echo "\n";
 		}
 		elseif(in_array($key,array('nossm')))
 		{
-			$input = '<div class="controls">' . $tabline
+			$input = ''
+				   //. '<div class="controls">' . $tabline
 			       . '<div class="input-prepend input-append">' . $tabline
-				   . ' <span class="add-on">$</span><input class="span2" id="appendedPrependedInput" size="16" type="text"><span class="add-on">.00</span>'
-				   . '</div>'
-				   . '</div>';
-			?><td valign="top"><?php echo $input ?></td><?php 
-		}
-		elseif(in_array($key,array('respon')))
-		{ 
-			$input = '<div class="input-group input-group-sm">' . $tabline
-				   . '<span class="input-group-addon">' . $data . '</span>' . $tabline
+				   //. '<span class="add-on">$</span>' . $tabline
 				   . '<input type="text" name="' . $key . '[' . $id . ']"' 
 				   . ' value="' . $data . '"'
-				   . ' class="form-control">'
+				   . ' class="span2" id="appendedPrependedInput">' . $tabline
+				   . '<span class="add-on">' . $data . '</span>'
+				   //. '</div>'
+				   . '</div>';
+			?><td valign="top"><?php echo $input ?></td><?php echo "\n";
+		}
+		elseif(in_array($key,array('respon','msic2008','kp')))
+		{ 
+			$input = '<div class="input-prepend input-append">' . $tabline
+				   . '<span class="add-on">' . $data . '</span>' . $tabline
+				   . '<input type="text" name="' . $key . '[' . $id . ']"' 
+				   . ' value="' . $data . '"'
+				   . ' class="span1">'
 				   . $tabline2 . '</div>'
 				   //. '<pre>' . $data . '</pre>'
 				   . '';
-			?><td valign="top"><?php echo $input ?></td><?php 
+			?><td valign="top"><?php echo $input ?></td><?php echo "\n";
+		}
+		elseif(in_array($key,array('nota')))
+		{ 
+			$input = '' //'<div class="input-prepend input-append">' . $tabline
+				   //. '<span class="add-on">' . $data . '</span>' . $tabline
+				   . '<textarea class="input-xlarge" id="textarea" rows="3"'
+				   . ' name="' . $key . '[' . $id . ']" >'
+				   //. '<input type="text" name="' . $key . '[' . $id . ']"' 
+				   . $data . '</textarea>'
+				   //. $tabline2 . '</div>'
+				   . $tabline2 . '<pre>' . $data . '</pre>'
+				   . '';
+			?><td valign="top"><?php echo $input ?></td><?php echo "\n";
+		}
+		elseif(in_array($key,array('tentang_staf')))
+		{
+			$namaMedan = array('pengurusan','juruteknik','kerani','operatif','asas');
+			$tambah = 1; $input = $tabline . '<table>';
+			
+			foreach($namaMedan as $medanApa)
+			{
+				$input .= $tabline . '<tr><td valign="center">'
+					   . $medanApa
+					   . "</td>$tabline<td>"
+					   . '<input type="text" name="bil_' . $medanApa . '[' . $id . ']"' 
+					   . ' class="span1">'
+					   . "</td>$tabline<td>"
+					   . '<input type="text" name="gaji_' . $medanApa . '[' . $id . ']"' 
+					   . ' class="span2">'
+					   //. $tabline2 . '</div>'
+					   . '</td></tr>' . "\n";
+			}	$input .= '</table>';
+			
+			?><td valign="top"><?php echo $input ?></td><?php echo "\n";
+		}
+		elseif(in_array($key,array('bil_staf')))
+		{
+			?><td valign="top"><?php echo "<table>\n\t<tr><td>" .
+				$data . "\n\t</td></tr></table>\n" ?></td><?php echo "\n";
 		}
 		else
 		{
-			?><td><?php echo $data ?></td><?php
+			?><td><?php echo $data ?></td><?php echo "\n";
 		}
 	} 
 
