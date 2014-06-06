@@ -109,10 +109,10 @@ class Batch_Tanya extends Tanya
 		//echo '<pre>$jum:'; print_r($jum) . '</pre><br>';
 		$sql = 'SELECT ' . $medan . ' FROM ' . $myTable 
 			 . $this->dimana($carian)
-			 . ' ORDER BY '. $jum['susun']
+			 . ( ($jum['susun']==null) ? null : ' ORDER BY '. $jum['susun'])
 			 . ' LIMIT ' . $jum['max'];
 		
-		//echo $sql . '<br>';
+		echo '<pre>' . htmlentities($sql) . '</pre>';
 		$result = $this->db->selectAll($sql);
 		//echo json_encode($result);
 		
@@ -164,7 +164,7 @@ class Batch_Tanya extends Tanya
 			 . $this->dibawah($susun)
 			 . '';
 		
-		echo $sql . '<br>';
+		//echo $sql . '<br>';
 		$result = $this->db->selectAll($sql);
 		//echo json_encode($result);
 		//echo '<pre>result:' . print_r($result) . '</pre>';
