@@ -44,6 +44,7 @@ class Suku1 extends Kawal
 		// Set pemboleubah utama
 		$this->papar->pegawai = senarai_kakitangan();
 		$this->papar->Tajuk_Muka_Surat='MM 2012';
+		$this->papar->cetak='papar';
 		$this->papar->gambar=gambar_latarbelakang('../../');		
 
 		// pergi papar kandungan fungsi papar($this->_folder) dalam KAWAL
@@ -56,7 +57,7 @@ class Suku1 extends Kawal
 		$cari[] = array('fix'=>'x','atau'=>'WHERE',
 			'medan'=>$medanID,'apa'=>$cariID);
 		$susun[] = array('susun'=>'subsektor,newss',
-			'dari'=>'0','max'=>'30');
+			'dari'=>'0','max'=>'200');
 
 		// papar semua data
 		$this->papar->senaraiData[$this->_jadual] = 
@@ -64,21 +65,21 @@ class Suku1 extends Kawal
 			'subsektor,newss,nossm,respon'
 			. ',concat_ws(\' \',nama,operator) as `kod2`'
 			. ',concat_ws(\'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\',newss,\'QSS2013\',msic2008) as `kod`'
-			. ',concat_ws(\' \',fe,respon,msic2008,utama) as `keputusan`'
+			. ',concat_ws(\' \',msic2008,utama) as `msic`'
 			. ',concat_ws(\' \',alamat1,alamat2,poskod,bandar) as `alamat penuh`' 
-			//. ',concat_ws(\'\',utama,msic2008,ngdbbp) as kod3'
+			. ',concat_ws(\'-\',fe,respon) as keputusan'
 			. '',$cari,$susun);
 		$this->papar->medanID ='newss';
 		//echo '<pre>$senaraiData->', print_r($this->papar->senaraiData, 1) . '</pre>';# papar $senaraiData
 		
 		// Set pemboleubah utama
-		$this->papar->cetak = 'cetak';
+		$this->papar->cetak = $cetak;
 		$this->papar->pegawai = senarai_kakitangan();
 		$this->papar->Tajuk_Muka_Surat='qss 2014';
 		$this->papar->gambar=gambar_latarbelakang('../../');		
 
 		// pergi papar kandungan fungsi papar($this->_folder) dalam KAWAL
-		$this->papar->baca(Kebenaran::papar($this->_folder), 1);
+		$this->papar->baca(Kebenaran::papar($this->_folder), 0);
 	}
 
 	public function cetakf3($medanID, $cariID, $cetak = 'cetak') 
