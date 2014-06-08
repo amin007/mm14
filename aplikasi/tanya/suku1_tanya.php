@@ -50,9 +50,8 @@ class Suku1_Tanya extends Tanya
 			}
 				$order .= ($kumpul==null) ? '' : " GROUP BY $kumpul\r";
 				$order .= ($susun==null) ? '' : " ORDER BY $susun\r";
-				$order .= ($max==null) ? '' : 
-					(($dari==null) "LIMIT $max" : " LIMIT $dari,$max\r");
-
+				$order .= ($max==null) ? '' : (($dari==null) ? 
+					"LIMIT $max" : " LIMIT $dari,$max\r");
 		endif;
 	
 		return $order;		
