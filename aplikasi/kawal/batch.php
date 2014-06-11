@@ -36,8 +36,8 @@ class Batch extends Kawal
 			//. 'tel,fax,responden,email,nota';
 		$this->medanData = 'newss,'
 			. 'concat_ws("<br>",nama,operator,alamat1,alamat2,poskod,bandar) as nama,'
-			. 'batchAwal fe,respon,' //substring(`YR_MSIC_ID`,1,5) msic,'
-			. 'nota, "" tentang_staf,'  . "\r"
+			. 'batchAwal fe,respon,data_tahunan,' //substring(`YR_MSIC_ID`,1,5) msic,'
+			. 'nota,'  . "\r"
 			. ' concat_ws("</td></tr>\r\t<tr><td>",' . "\r"
 			. ' 	concat_ws("</td><td>","pengurusan",bil_pengurusan,gaji_pengurusan),' . "\r"
 			//. ' 	concat("\r<tr><td>"),' . "\r"
@@ -235,9 +235,9 @@ class Batch extends Kawal
     {
         $posmen = array();
         $medanID = 'newss';
-		$medanUbah = array('respon','nota',
-			'bil_pengurusan','bil_juruteknik','bil_kerani','bil_operatif','bil_asas',
-			'gaji_pengurusan','gaji_juruteknik','gaji_kerani','gaji_operatif','gaji_asas'
+		$medanUbah = array('respon','nota','data_tahunan'
+			//'bil_pengurusan','bil_juruteknik','bil_kerani','bil_operatif','bil_asas',
+			//'gaji_pengurusan','gaji_juruteknik','gaji_kerani','gaji_operatif','gaji_asas'
 		);
 		$myTable = 'ejob14_q1';
         foreach ($_POST as $namaMedan => $value)
