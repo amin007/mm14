@@ -87,7 +87,7 @@ for ($kira=0; $kira < count($row); $kira++)
 				   . '';
 			?><td valign="top"><?php echo $input ?></td><?php echo "\n";
 		}
-		elseif(in_array($key,array('nota')))
+		elseif(in_array($key,array('nota','data_tahunan')))
 		{ 
 			$input = '' //'<div class="input-prepend input-append">' . $tabline
 				   //. '<span class="add-on">' . $data . '</span>' . $tabline
