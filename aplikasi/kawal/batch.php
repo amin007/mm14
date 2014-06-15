@@ -34,8 +34,12 @@ class Batch extends Kawal
 			. ' substring(1,5, `YR_MSIC_ID`) msic2008, subsektor,'
 			. 'concat_ws("<br>",alamat1,alamat2,poskod,bandar) as alamat' . "\r";
 			//. 'tel,fax,responden,email,nota';
+		$space = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 		$this->medanData = 'newss,'
-			. 'concat_ws("<br>",nama,operator,alamat1,alamat2,poskod,bandar) as nama,'
+			. 'concat_ws("<br>",LOWER(nama),'
+			. 'concat("<br>(",newss,")'.$space.'205'.$space.'",msic2008,"'.$space.'2014"),'
+			. 'nossm,"<br>PENGURUS",nama,operator,alamat1,alamat2,'
+			. 'concat(poskod," ",bandar) ) as nama,'
 			. 'batchAwal fe,respon,data_tahunan,' //substring(`YR_MSIC_ID`,1,5) msic,'
 			. 'nota,'  . "\r"
 			. ' concat_ws("</td></tr>\r\t<tr><td>",' . "\r"
