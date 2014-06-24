@@ -7,7 +7,6 @@
 //print_r($this->cariID); 
 //print_r($this->carian); 
 
-
 if ($this->carian=='[id:0]')
 {
 	echo 'data kosong<br>';
@@ -85,7 +84,8 @@ foreach ($this->cariApa as $myTable => $row)
 			if ($key=='newss')
 			{
 				$id = $data; 
-				$k1 = URL . "kawalan/ubah/$id";
+				//$k1 = URL . "kawalan/ubah/$id";
+				$k1 = URL . "batch/ubah/30/1/$cariBatch/$id";
 				$cb = URL . "batch/buangBatchAwal/$cariBatch/$id";
 
 				?><td><?php
@@ -97,13 +97,14 @@ foreach ($this->cariApa as $myTable => $row)
 			{
 				$k1 = URL . "batch/awal/$data";
 				$t1 = str_replace(' ', '', huruf('Besar_Depan', $data) );
-				//$k2 = URL . "batch/tukarBatch/$t1?asal=$data";
+				$k3 = URL . "batch/tukarBatch/$t1?asal=$data";
 				$k2 = URL . "laporan/cetakf3semua/$data/500";
 				if ($data == null) { ?><td>&nbsp;</td><?php }
 				else
 				{	?><td><?php
 					?><a href="<?php echo $k1 ?>" class="btn btn-primary btn-mini"><?php echo $data ?></a><?php
 					?><a target="_blank" href="<?php echo $k2 ?>" class="btn btn-danger btn-mini">Cetak</a><?php
+					?><a target="_blank" href="<?php echo $k3 ?>" class="btn btn-warning btn-mini">Semam</a><?php
 					?></td><?php
 				}
 			}
