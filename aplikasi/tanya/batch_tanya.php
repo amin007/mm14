@@ -237,7 +237,7 @@ class Batch_Tanya extends Tanya
 		
 		# set sql
 		$sql = " UPDATE `$myTable` SET \r$senaraiData\r $where";
-		//echo '<pre>$sql->', print_r($sql, 1) . '</pre>';
+		echo '<pre>$sql->', print_r($sql, 1) . '</pre>';
 		//$this->db->update($sql);
 		//*/
 	}
