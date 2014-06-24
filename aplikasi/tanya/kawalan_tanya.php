@@ -118,7 +118,8 @@ class Kawalan_Tanya extends Tanya
 
 		$sql = 'SELECT ' . $medan . ' FROM ' . $sv . $myTable 
 		     . ' b, `mm_rangka14` as c WHERE b.newss = c.newss '
-			 . ' and (b.terima is null or b.terima like "0000%") ' 
+			 //. ' and (b.terima is null or b.terima like "0000%") ' 
+			 . ' and b.respon is null ' 
 			 . $carife
 			 . ' LIMIT ' . $jum['dari'] . ', ' . $jum['max'];
 
