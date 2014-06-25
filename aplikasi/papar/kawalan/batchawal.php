@@ -102,9 +102,9 @@ foreach ($this->cariApa as $myTable => $row)
 				if ($data == null) { ?><td>&nbsp;</td><?php }
 				else
 				{	?><td><?php
+					?><input type="checkbox"><?php
 					?><a href="<?php echo $k1 ?>" class="btn btn-primary btn-mini"><?php echo $data ?></a><?php
 					?><a target="_blank" href="<?php echo $k2 ?>" class="btn btn-danger btn-mini">Cetak</a><?php
-					?><a target="_blank" href="<?php echo $k3 ?>" class="btn btn-warning btn-mini">Semam</a><?php
 					?></td><?php
 				}
 			}
