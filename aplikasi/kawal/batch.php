@@ -164,7 +164,7 @@ class Batch extends Kawal
 				$bilSemua = $this->tanya->kiraKes($myTable, $medan, $carian);
 				# tentukan bilangan mukasurat. bilangan jumlah rekod
 				//echo '$bilSemua:' . $bilSemua . ', $item:' . $item . ', $ms:' . $ms . '<br>';
-				$jum = pencamSqlLimit($bilSemua, $item, $ms, null, 'nama');
+				$jum = pencamSqlLimit($bilSemua, $item, $ms, null, 'respon DESC,nama');
 				# sql guna limit
 				$this->papar->cariApa[$myTable] = $this->tanya->
 					kesBatchAwal($myTable, $medan, $carian, $jum);
