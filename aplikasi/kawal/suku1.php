@@ -79,7 +79,7 @@ class Suku1 extends Kawal
 		$this->papar->gambar=gambar_latarbelakang('../../');		
 
 		// pergi papar kandungan fungsi papar($this->_folder) dalam KAWAL
-		$this->papar->baca(Kebenaran::papar($this->_folder), 0);
+		$this->papar->baca(Kebenaran::papar($this->_folder), 1);
 	}
 
 	public function cetakf3($medanID, $cariID, $cetak = 'cetak') 
