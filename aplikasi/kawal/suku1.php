@@ -52,7 +52,7 @@ class Suku1 extends Kawal
 		$this->papar->baca($fail);
 	}
 
-	public function asing($medanID, $cariID, $cetak = 'cetak') 
+	public function asing($medanID, $cariID, $cetak = 'papar') 
 	{	//echo 'class qss4 fungsi index()<br>';		
 		$cari[] = array('fix'=>'x','atau'=>'WHERE',
 			'medan'=>$medanID,'apa'=>$cariID);
@@ -62,7 +62,8 @@ class Suku1 extends Kawal
 		// papar semua data
 		$this->papar->senaraiData[$this->_jadual] = 
 			$this->tanya->asingSv($this->_jadual, 
-			'subsektor,newss,nossm,respon'
+			'subsektor,newss,nossm'
+			. ',concat_ws(\' \',\'<input type="checkbox">\',respon) as `respon`'
 			. ',concat_ws(\' \',nama,operator) as `kod2`'
 			. ',concat_ws(\'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\',newss,\'QSS2013\',msic2008) as `kod`'
 			. ',concat_ws(\' \',msic2008,utama) as `msic`'
@@ -79,7 +80,7 @@ class Suku1 extends Kawal
 		$this->papar->gambar=gambar_latarbelakang('../../');		
 
 		// pergi papar kandungan fungsi papar($this->_folder) dalam KAWAL
-		$this->papar->baca(Kebenaran::papar($this->_folder), 1);
+		$this->papar->baca(Kebenaran::papar($this->_folder), 0);
 	}
 
 	public function cetakf3($medanID, $cariID, $cetak = 'cetak') 
