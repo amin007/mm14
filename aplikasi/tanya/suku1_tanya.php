@@ -8,6 +8,20 @@ class Suku1_Tanya extends Tanya
 		parent::__construct();
 	}
 // carian global untuk fungsi
+	private function jika($atau, $cariMedan, $fix, $cariApa)
+	{
+		$dimana = null;
+		if($atau==null ) $dimana .= null;
+		elseif ($cariApa==null) 
+			$dimana .= " $atau`$cariMedan` is null\r";
+		elseif($fix=='x')
+			$dimana .= " $atau`$cariMedan`='$cariApa'\r";
+		else
+			$dimana .= " $atau`$cariMedan` like '%$cariApa%'\r";	
+		
+		return $dimana;
+	}
+	
 	private function dimana($carian)
 	{
 		$where = null;
@@ -22,12 +36,7 @@ class Suku1_Tanya extends Tanya
 				  $cariApa = isset($carian[$key]['apa'])   ? $carian[$key]['apa']        : null;
 				//echo "\r$key => ($fix) $atau $cariMedan = '$cariApa'  ";
 				
-				if ($cariApa==null) 
-					$where .= " $atau`$cariMedan` is null\r";
-				elseif($fix=='x')
-					$where .= " $atau`$cariMedan`='$cariApa'\r";
-				else
-					$where .= " $atau`$cariMedan` like '%$cariApa%'\r";	
+				$where .= $this->jika($atau, $cariMedan, $fix, $cariApa);
 			}
 		endif;
 	
