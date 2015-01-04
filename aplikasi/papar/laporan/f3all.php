@@ -1,7 +1,7 @@
 <?php
 include 'diatas.php';
 	$pegawai = senarai_kakitangan(); // kumpul nama fe
-	$sv = 'CDT';
+	$sv = 'QSS';
 	$nama_penyelia = 'Abdul Razak';
 	$nama_pegawai = $this->fe;
 	if (count($this->hasil)==0):
