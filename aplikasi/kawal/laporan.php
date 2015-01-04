@@ -365,36 +365,36 @@ class Laporan extends Kawal
 //*/		
 	}
 
-	public function cetakf3johor($cariBatch, $item = 30, $ms = 1)
+	public function cetakf3suku($sv = 'QSS', $cariBatch, $item = 30, $ms = 1)
 	{
 		# kiraKes dulu
-		$jadual = 'cdt2014_johor';
-		$carian[] = array('fix'=>'like','atau'=>'WHERE','medan'=>'batchAwal','apa'=>$cariBatch);
+		$jadual = 'qss14_q1';
+		$carian[] = array('fix'=>'like','atau'=>'WHERE','medan'=>'fe','apa'=>$cariBatch);
 		$bilSemua = $this->tanya->kiraKes($jadual, $medan = '*', $carian);
 		# tentukan bilangan mukasurat. bilangan jumlah rekod
 		//echo '$bilSemua:' . $bilSemua . ', $item:' . $item . ', $ms:' . $ms . '<br>';
-		$jum = pencamSqlLimit($bilSemua, $item, $ms, 'kp,nama ASC');
+		$jum = pencamSqlLimit($bilSemua, $item, $ms);
+		$susun[] = array_merge($jum, array('kumpul'=>null, 'susun'=>'subsektor, sv, nama' ) );
 
 		# kumpul respon
 		$kumpul = $this->tanya->kumpulRespon('kod','f2','respon',
-			$medan = "concat_ws('<br>Operator:',nama,operator) nama, concat_ws(' ',kp) as 'sv', "
-				   . "utama, newss, concat_ws(' ',nota) nota",
-			$jadual,$carian,$jum);
+			$medan = "concat_ws('<br>Operator:',nama,operator) nama, concat_ws(' ',sv) as 'sv', "
+				   . "utama, newss, concat_ws(' ',respon,'-',catatan_jp_negeri) nota",
+			$jadual,$carian,$susun);
 		//echo '<pre>$kumpul:'; print_r($kumpul) . '</pre>';
 		$this->papar->kiraSemuaBaris = $bilSemua;
 		$this->papar->item = $item;
 		$this->papar->ms = $ms;
-		$this->papar->kiraBaris = $kumpul['kiraBaris'];
-		$this->papar->kiraMedan = $kumpul['kiraMedan'];
 		$this->papar->hasil = $kumpul['kiraData'];
 		$this->papar->fe = $cariBatch;
+		$this->papar->kp = $sv;
 		//$this->papar->halaman = halamanf3($jum);
 
 		# Set pemboleubah utama
         $this->papar->pegawai = senarai_kakitangan();
-        $this->papar->lokasi = 'CDT 2014 - Ubah';
+        $this->papar->lokasi = 'QSS 2014 - F3';
 		
-		 # pergi papar kandungan
+		# pergi papar kandungan
 		//echo '<br>location: ' . URL . "batchawal/semak/$cariBatch/$dataID" . '';
 		//$this->papar->baca('kawalan/batchsemak_cetak', 1);
 		$this->papar->baca('laporan/f3all', 1);
