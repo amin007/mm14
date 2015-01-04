@@ -103,7 +103,7 @@ $kini = ( !isset($this->kini) ) ? null : $this->kini;
 		<li><a target="_blank" href="<?php echo $url ?>laporan_f3.php/mm">Laporan F3 - MM</a></li>
 		<li><a target="_blank" href="<?php echo $url ?>laporan/cetakf3suku/qss/amin/300/1">Laporan F3 - QSS</a></li>
 		<li><a target="_blank" href="<?php echo $url ?>laporan/f7">Laporan F7</a></li>
-		<li><a target="_blank" href="<?php echo $url ?>laporan/tehar">Bulanan Tegar</a></li>
+		<li><a target="_blank" href="<?php echo $url ?>laporan/tegar">Bulanan Tegar</a></li>
 		<li><a target="_blank" href="<?php echo $url ?>laporan/bulan">Bulan <?=$kini?></a></li>
 		</ul>	
 	</li>
