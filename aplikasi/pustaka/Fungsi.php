@@ -355,13 +355,23 @@ function paparJadualF3_TajukBesar($allRows,$rows,$fields,$kodsv,$nama_penyelia,$
 		'<div align="center">' .
 		'JABATAN PERANGKAAN MALAYSIA NEGERI JOHOR' .
 		'<br>SENARAI INDUK AGIHAN KES ANGGOTA ' .
-		'<br>' . $SV . ' ' . date('Y') .
+		'<br>' . $SV . ' 4-2014' . //date('Y') .
 		'</div><br><div align="left">' .
 		"Nama Penyelia : $nama_penyelia" .
 		'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' .
 		'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' .
+		'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' .
+		'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' .
+		'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' .
+		'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' .
+		'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' .
 		"Nama FE : $nama_pegawai ($allRows kes)" .
 		"(muka $ms dari " . ($item*$ms) . ")" .
+		'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' .
+		'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' .
+		'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' .
+		'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' .
+		'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' .
 		'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' .
 		'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' .
 		'Tarikh : <u>' . (date('d')) .
@@ -431,7 +441,7 @@ function paparJadualF3_TajukBawah($rows,$fields)
 	$cetak='style="page-break-after:always">';
 	echo '<tr style="page-break-after:always"><td colspan=' . ($fields+1) . '>' .
 		'<p align=left><font size=2>' .
-		'<br>A) Laporan kawalan harian ini merujuk kepada arahan Pengarah pada mesyuarat Pemantauan' .
+		'A) Laporan kawalan harian ini merujuk kepada arahan Pengarah pada mesyuarat Pemantauan' .
 		'<br>B) Sila kemaskini laporan ini setiap hari dan failkan mengikut turutan tarikh oleh FE' .
 		'<br>C) Tarikh laporan ini bersamaan tarikh kerja luar pada F2 syarikat yang disenaraikan' .
 		'<br>D) Laporan ini tidak perlu diisi oleh FE jika tiada kerja luar / telefon dsb' .
@@ -491,14 +501,15 @@ function paparJadualF3_Data($sv,$nama_penyelia,$nama_pegawai,$allRows,$rows,$fie
 		## tajuk bawah - bil, jumlah besar, utama, newss, A1-B7
 			echo "<tr>\n";// dptkan nama medan
 			echo '<th>&nbsp;</th>' . "\n";
-			echo '<th colspan=2>Jumlah Besar</th>' . "\n";
+			echo '<th>Jumlah Besar</th>' . "\n";
+			echo '<th>&nbsp;</th>' . "\n";
 			echo '<th>&nbsp;</th>' . "\n";
 			echo '<th>&nbsp;</th>' . "\n";
 			foreach ($hasil[0] as $key => $kunci)
 			{
 				//echo '<th>&nbsp;</th>' . "\n";	
 				echo (in_array($key,array('nama','sv','utama','newss')))?  
-				'':'<th>' . $kunci . '</th>' . "\n";	
+				'':'<th>&nbsp;</th>' . "\n";	
 			}
 			echo "</tr>\n";
 
