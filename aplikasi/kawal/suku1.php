@@ -53,7 +53,8 @@ class Suku1 extends Kawal
 	}
 
 	public function asing($medanID, $cariID, $cetak = 'papar') 
-	{	//echo 'class qss4 fungsi index()<br>';		
+	{	//echo 'class qss4 fungsi index()<br>';	
+		//echo '$medanID=' . $medanID . ', $cariID=' . $cariID . '<br>';	
 		$cari[] = array('fix'=>'x','atau'=>'WHERE',
 			'medan'=>$medanID,'apa'=>$cariID);
 		$susun[] = array('susun'=>'subsektor,newss',
