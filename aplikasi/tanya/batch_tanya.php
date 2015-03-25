@@ -104,19 +104,6 @@ class Batch_Tanya extends Tanya
 		return $result;
 	}
 
-	public function cariGroup($myTable, $medan, $carian = null, $susun = null)
-	{
-		$sql = 'SELECT ' . $medan . ' FROM ' . $myTable 
-			 . $this->dimana($carian)
-			 . $this->dibawah($susun)
-			 . '';
-		
-		//echo '<pre>cariGroup:' . htmlentities($sql) . '</pre>';
-		$result = $this->db->selectAll($sql);
-		
-		return $result;
-	}
-	
 	public function kesBatchAwal($myTable, $medan, $carian = null, $susun = null)
 	{
 		$sql = ' SELECT ' . $medan . ' FROM ' . $myTable 
