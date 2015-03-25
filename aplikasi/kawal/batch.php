@@ -30,8 +30,8 @@ class Batch extends Kawal
             'bootstrap-datepicker.css',
             'bootstrap-editable.css');
 			
-        $this->medanRangka = 'newss,nossm,concat_ws("<br>",nama,operator) as nama,batchAwal,respon r, '
-			. ' substring(1,5, `YR_MSIC_ID`) msic2008, subsektor,'
+        $this->medanRangka = 'newss,nossm,concat_ws("<br>",nama,operator) as nama,batchAwal,respon r,'
+			. 'substring(1,5,`YR_MSIC_ID`) msic2008, subsektor,' . "\r "
 			. 'concat_ws("<br>",alamat1,alamat2,poskod,bandar) as alamat' . "\r";
 			//. 'tel,fax,responden,email,nota';
 		$space = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
@@ -149,13 +149,15 @@ class Batch extends Kawal
 			# buat group ikut batchAwal
 			# tentukan bilangan mukasurat. bilangan jumlah rekod
 			//echo '$bilSemua:' . $bilSemua . ', $item:' . $item . ', $ms:' . $ms . '<br>';
-			$susun[] = pencamSqlLimit(300, $item, $ms, 'batchAwal', 'batchAwal');
+			$jum = pencamSqlLimit(300, $item, $ms);
+			$susun[] = array_merge($jum,array('kumpul' => 'batchAwal', 'susun' => 'batchAwal'));
 			$jadualGroup = $senaraiJadual[0];
 			# sql semula
 			$this->papar->cariApa['kiraBatchAwal'] = $this->tanya->
 				cariGroup($jadualGroup, $medanGroup = 'batchAwal, count(*) as kira', $carian = null, $susun);
 
 			# mula papar semua dalam $myTable
+			$jum = $susun = null;
 			$carian[] = array('fix'=>'x=','atau'=>'WHERE','medan'=>'batchAwal','apa'=>$cariBatch);
 			foreach ($senaraiJadual as $key => $myTable)
 			{# mula ulang table
@@ -164,10 +166,11 @@ class Batch extends Kawal
 				$bilSemua = $this->tanya->kiraKes($myTable, $medan, $carian);
 				# tentukan bilangan mukasurat. bilangan jumlah rekod
 				//echo '$bilSemua:' . $bilSemua . ', $item:' . $item . ', $ms:' . $ms . '<br>';
-				$jum = pencamSqlLimit($bilSemua, $item, $ms, null, 'respon DESC,nama');
+				$jum = pencamSqlLimit($bilSemua, $item, $ms);
+				$susun[] = array_merge($jum,array('kumpul' => null, 'susun' => 'respon DESC,nama'));
 				# sql guna limit
 				$this->papar->cariApa[$myTable] = $this->tanya->
-					kesBatchAwal($myTable, $medan, $carian, $jum);
+					kesBatchAwal($myTable, $medan, $carian, $susun);
 			}# tamat ulang table
 			//$this->papar->cariApa = array();
 
@@ -185,7 +188,7 @@ class Batch extends Kawal
 		$this->papar->carian = 'semua';
         
         # pergi papar kandungan
-        $this->papar->baca('kawalan/batchawal', 0);
+        $this->papar->baca('kawalan/batchawal', 1);
     }
 
 // tukar banyak kes sendiri ikut alamat
