@@ -120,13 +120,10 @@ class Batch_Tanya extends Tanya
 	
 	public function kesBatchAwal($myTable, $medan, $carian = null, $susun = null)
 	{
-		//echo '<pre>$susun:'; print_r($susun) . '</pre><br>';
 		$sql = ' SELECT ' . $medan . ' FROM ' . $myTable 
 			 . $this->dimana($carian)
 			 . $this->dibawah($susun)
 			 . '';
-			 //. ( ($jum['susun']==null) ? null : ' ORDER BY '. $jum['susun'])
-			 //. ' LIMIT ' . $jum['max'];
 		
 		echo '<pre>kesBatchAwal:' . htmlentities($sql) . '</pre>';
 		$result = $this->db->selectAll($sql);
