@@ -113,7 +113,6 @@ class Batch_Tanya extends Tanya
 		
 		//echo '<pre>cariGroup:' . htmlentities($sql) . '</pre>';
 		$result = $this->db->selectAll($sql);
-		//echo '<pre>result:' . print_r($result) . '</pre>';
 		
 		return $result;
 	}
