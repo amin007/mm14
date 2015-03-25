@@ -111,14 +111,14 @@ class Batch_Tanya extends Tanya
 			 . $this->dibawah($susun)
 			 . '';
 		
-		echo '<pre>cariGroup:' . htmlentities($sql) . '</pre>';
+		//echo '<pre>cariGroup:' . htmlentities($sql) . '</pre>';
 		$result = $this->db->selectAll($sql);
 		//echo '<pre>result:' . print_r($result) . '</pre>';
 		
 		return $result;
 	}
 	
-	public function kesBatchAwal($myTable, $medan, $carian, $susun)
+	public function kesBatchAwal($myTable, $medan, $carian = null, $susun = null)
 	{
 		//echo '<pre>$susun:'; print_r($susun) . '</pre><br>';
 		$sql = ' SELECT ' . $medan . ' FROM ' . $myTable 
