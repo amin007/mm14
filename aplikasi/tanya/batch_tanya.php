@@ -103,20 +103,7 @@ class Batch_Tanya extends Tanya
 		
 		return $result;
 	}
-
-	public function kesBatchAwal($myTable, $medan, $carian = null, $susun = null)
-	{
-		$sql = ' SELECT ' . $medan . ' FROM ' . $myTable 
-			 . $this->dimana($carian)
-			 . $this->dibawah($susun)
-			 . '';
-		
-		echo '<pre>kesBatchAwal:' . htmlentities($sql) . '</pre>';
-		$result = $this->db->selectAll($sql);
-		
-		return $result;
-	}
-		
+	
 	public function kumpulRespon($medanR, $f2, $r = 'respon', 
 		$medan, $myTable, $carian, $jum)
 	// kumpulRespon('kod','f2',$jadual,$carian,$jum);
@@ -153,6 +140,19 @@ class Batch_Tanya extends Tanya
 		
 		return $result;		
 		
+	}
+
+	public function kesBatchAwal($myTable, $medan, $carian = null, $susun = null)
+	{
+		$sql = ' SELECT ' . $medan . ' FROM ' . $myTable 
+			 . $this->dimana($carian)
+			 . $this->dibawah($susun)
+			 . '';
+		
+		echo '<pre>kesBatchAwal:' . htmlentities($sql) . '</pre>';
+		$result = $this->db->selectAll($sql);
+		
+		return $result;
 	}
 
 	public function cariSemuaData($myTable, $medan, $carian = null, $susun = null)
