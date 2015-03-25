@@ -37,7 +37,7 @@ class Batch_Tanya extends Tanya
 	
 	private function dibawah($carian)
 	{
-		$susunan = null;
+		$susunan = null; 
 		if($carian==null || empty($carian) ):
 			$susunan .= null;
 		else:
@@ -47,11 +47,11 @@ class Batch_Tanya extends Tanya
 				 $order = isset($cari['susun']) ? $cari['susun']  : null;
 				  $dari = isset($cari['dari'])  ? $cari['dari']   : null;			
 				   $max = isset($cari['max'])   ? $cari['max']    : null;
-				
-				//echo "\$cari = $cari, \$key=$key <br>";
+				   
+				//echo " \$key=$key, \$cari = $cari,<br>";
 			}
 				if ($kumpul!=null)$susunan .= " GROUP BY $kumpul\r";
-				if ($order!=null) $susunan .= " ORDER BY $order\r ";
+				if ($order!=null) $susunan .= " ORDER BY $order\r";
 				if ($max!=null)   $susunan .= ($dari==0) ? 
 					" LIMIT $max\r" : " LIMIT $dari,$max\r";
 		endif; //echo " $susunan hahaha<hr>";
@@ -103,18 +103,33 @@ class Batch_Tanya extends Tanya
 		
 		return $result;
 	}
-	
-	public function kesBatchAwal($myTable, $medan, $carian, $jum)
+
+	public function cariGroup($myTable, $medan, $carian = null, $susun = null)
 	{
-		//echo '<pre>$jum:'; print_r($jum) . '</pre><br>';
 		$sql = 'SELECT ' . $medan . ' FROM ' . $myTable 
 			 . $this->dimana($carian)
-			 . ( ($jum['susun']==null) ? null : ' ORDER BY '. $jum['susun'])
-			 . ' LIMIT ' . $jum['max'];
+			 . $this->dibawah($susun)
+			 . '';
 		
-		echo '<pre>' . htmlentities($sql) . '</pre>';
+		echo '<pre>cariGroup:' . htmlentities($sql) . '</pre>';
 		$result = $this->db->selectAll($sql);
-		//echo json_encode($result);
+		//echo '<pre>result:' . print_r($result) . '</pre>';
+		
+		return $result;
+	}
+	
+	public function kesBatchAwal($myTable, $medan, $carian, $susun)
+	{
+		//echo '<pre>$susun:'; print_r($susun) . '</pre><br>';
+		$sql = ' SELECT ' . $medan . ' FROM ' . $myTable 
+			 . $this->dimana($carian)
+			 . $this->dibawah($susun)
+			 . '';
+			 //. ( ($jum['susun']==null) ? null : ' ORDER BY '. $jum['susun'])
+			 //. ' LIMIT ' . $jum['max'];
+		
+		echo '<pre>kesBatchAwal:' . htmlentities($sql) . '</pre>';
+		$result = $this->db->selectAll($sql);
 		
 		return $result;
 	}
@@ -155,21 +170,6 @@ class Batch_Tanya extends Tanya
 		
 		return $result;		
 		
-	}
-
-	public function cariGroup($myTable, $medan, $carian = null, $susun = null)
-	{
-		$sql = 'SELECT ' . $medan . ' FROM ' . $myTable 
-			 . $this->dimana($carian)
-			 . $this->dibawah($susun)
-			 . '';
-		
-		//echo $sql . '<br>';
-		$result = $this->db->selectAll($sql);
-		//echo json_encode($result);
-		//echo '<pre>result:' . print_r($result) . '</pre>';
-		
-		return $result;
 	}
 
 	public function cariSemuaData($myTable, $medan, $carian = null, $susun = null)
