@@ -343,6 +343,7 @@ function paparJadualF3_TajukBesar($allRows,$rows,$fields,$kodsv,$nama_penyelia,$
 		case 'MM':  $SV='PENYIASATAN PEMBUATAN BULANAN'; break;
 		case 'QSS': $SV='PENYIASATAN PERKHIDMATAN SUKU TAHUNAN'; break;
 		case 'EJOB': $SV='PENYIASATAN GUNA TENAGA SUKU TAHUNAN'; break;
+		case 'BST': $SV='PENYIASATAN BINAAN SUKU TAHUNAN'; break;
 		case 'MFG':  $SV='PENYIASATAN PEMBUATAN TAHUNAN'; break;
 		case 'SERVIS':  $SV='PENYIASATAN PERKHDIMATAN TAHUNAN'; break;
 		case 'PPPMAS':  $SV='PENYIASATAN PERBELANJAAN UNTUK PELINDUNGAN ALAM SEKITAR'; break;
@@ -355,7 +356,7 @@ function paparJadualF3_TajukBesar($allRows,$rows,$fields,$kodsv,$nama_penyelia,$
 		'<div align="center">' .
 		'JABATAN PERANGKAAN MALAYSIA NEGERI JOHOR' .
 		'<br>SENARAI INDUK AGIHAN KES ANGGOTA ' .
-		'<br>' . $SV . ' 4-2014' . //date('Y') .
+		'<br>' . $SV . ' 1-2015' . //date('Y') .
 		'</div><br><div align="left">' .
 		"Nama Penyelia : $nama_penyelia" .
 		'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' .
@@ -484,21 +485,28 @@ function paparJadualF3_Data($sv,$nama_penyelia,$nama_pegawai,$allRows,$rows,$fie
 				//echo '<td>' . $key . ' | ' . $data . '</td>';
 				//if (!in_array($key,array('nama','sv','utama','newss')))
 					//$key['jum'] .= $data;
-			}echo "</tr>\n";
-/*			if ($kira%'30'=='0')
-			{
-				echo '</tr>';
-				echo paparJadualF3_TajukMedan($rows,$fields,$hasil,$item,$ms);
-			}
-			else
-			{
-				
-			
-			}
-*/
+			}echo "</tr>\n";	
+
 		}
 
-		## tajuk bawah - bil, jumlah besar, utama, newss, A1-B7
+		## ruang kodong
+		if ($allRows != 30)
+		{
+			for($gst=$allRows; $gst < 30; $gst++)
+			{
+				echo "<tr>\n<td>" .($gst+1) . '</td>' . "\n";
+				echo "<td>&nbsp;</td>\n<td>&nbsp;</td>\n<td>&nbsp;</td>\n<td>&nbsp;</td>\n";
+				foreach ($hasil[0] as $key => $kunci)
+				{
+					//echo '<th>&nbsp;</th>' . "\n";	
+					echo (in_array($key,array('nama','sv','utama','newss')))?  
+					'':'<td>&nbsp;</td>' . "\n";	
+				}
+				echo "</tr>\n";
+				
+			}
+		}	
+			## tajuk bawah - bil, jumlah besar, utama, newss, A1-B7
 			echo "<tr>\n";// dptkan nama medan
 			echo '<th>&nbsp;</th>' . "\n";
 			echo '<th>Jumlah Besar</th>' . "\n";
