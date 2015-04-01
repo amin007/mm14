@@ -154,7 +154,7 @@ class Batch extends Kawal
 			$jadualGroup = $senaraiJadual[0];
 			# sql semula
 			$this->papar->cariApa['kiraBatchAwal'] = $this->tanya->
-				cariGroup($jadualGroup, $medanGroup = 'batchAwal, count(*) as kira', $carian = null, $susun);
+				cariSemuaData($jadualGroup, $medanGroup = 'batchAwal, count(*) as kira', $carian = null, $susun);
 
 			# mula papar semua dalam $myTable
 			$jum = $susun = null;
@@ -188,7 +188,7 @@ class Batch extends Kawal
 		$this->papar->carian = 'semua';
         
         # pergi papar kandungan
-        $this->papar->baca('kawalan/batchawal', 1);
+        $this->papar->baca('kawalan/batchawal', 0);
     }
 
 // tukar banyak kes sendiri ikut alamat
