@@ -499,7 +499,7 @@ class Laporan extends Kawal
 		 # pergi papar kandungan
 		//echo '<br>location: ' . URL . "batchawal/semak/$cariBatch/$dataID" . '';
 		//$this->papar->baca('kawalan/batchsemak_cetak', 1);
-		//$this->papar->baca('laporan/f3all', 1);
+		$this->papar->baca('laporan/f3all', 1);
 	}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
