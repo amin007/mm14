@@ -368,20 +368,21 @@ class Laporan extends Kawal
 	public function cetakf3suku($sv = 'QSS', $cariBatch, $item = 30, $ms = 1)
 	{
 		# kiraKes dulu
-		$jadual = 'qss14_q1';
+		//$jadual = 'qss14_q1';
+		$jadual = 'ejob15_q1';
 		$carian[] = array('fix'=>'like','atau'=>'WHERE','medan'=>'fe','apa'=>$cariBatch);
 		$bilSemua = $this->tanya->kiraKes($jadual, $medan = '*', $carian);
 		# tentukan bilangan mukasurat. bilangan jumlah rekod
 		//echo '$bilSemua:' . $bilSemua . ', $item:' . $item . ', $ms:' . $ms . '<br>';
 		$jum = pencamSqlLimit($bilSemua, $item, $ms);
-		$susun[] = array_merge($jum, array('kumpul'=>null, 'susun'=>'subsektor, sv, nama' ) );
+		$susun[] = array_merge($jum, array('kumpul'=>null, 'susun'=>'kp, nama' ) );
 
 		# kumpul respon
 		$kumpul = $this->tanya->kumpulRespon('kod','f2','respon',
-			$medan = "concat_ws('<br>Operator:',nama,operator) nama, concat_ws(' ',sv) as 'sv', "
-				   . "utama, newss, concat_ws(' ',respon,'-',catatan_jp_negeri) nota",
+			$medan = "concat_ws('<br>Operator:',nama,operator) nama, concat_ws(' ',kp) as 'kp', "
+				   . "'' utama, newss, '' nota",
 			$jadual,$carian,$susun);
-		echo '<pre>$kumpul:'; print_r($kumpul) . '</pre>';
+		//echo '<pre>$kumpul:'; print_r($kumpul) . '</pre>';
 		$this->papar->kiraSemuaBaris = $bilSemua;
 		$this->papar->item = $item;
 		$this->papar->ms = $ms;
@@ -397,7 +398,7 @@ class Laporan extends Kawal
 		# pergi papar kandungan
 		//echo '<br>location: ' . URL . "batchawal/semak/$cariBatch/$dataID" . '';
 		//$this->papar->baca('kawalan/batchsemak_cetak', 1);
-		//$this->papar->baca('laporan/f3all', 1);
+		$this->papar->baca('laporan/f3all', 1);
 	}
 // cetak f3 - senarai nama syarikat ikut fe/batchAwal
 	public function cetakf3($cariBatch, $item = 30, $ms = 1)
