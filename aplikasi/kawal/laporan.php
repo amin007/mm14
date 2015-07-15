@@ -379,7 +379,8 @@ class Laporan extends Kawal
 
 		# kumpul respon
 		$kumpul = $this->tanya->kumpulRespon('kod','f2','respon',
-			$medan = "concat_ws('<br>Operator:',nama,operator) nama, concat_ws(' ',kp) as 'kp', "
+			//$medan = "concat_ws('<br>Operator:',nama,operator) nama, concat_ws(' ',kp) as 'sv', "
+			$medan = "concat_ws('',nama,operator) nama, concat_ws(' ',kp) as 'sv', "
 				   . "'' utama, newss, '' nota",
 			$jadual,$carian,$susun);
 		//echo '<pre>$kumpul:'; print_r($kumpul) . '</pre>';
