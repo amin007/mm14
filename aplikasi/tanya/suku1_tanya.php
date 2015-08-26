@@ -149,7 +149,7 @@ class Suku1_Tanya extends Tanya
 			 . $this->dimana($carian)
 			 . $this->dibawah($susun);
 		
-		//echo '<br>' . $sql . '<hr>';
+		echo '<br>' . $sql . '<hr>';
 		$result = $this->db->selectAll($sql);
 		//echo json_encode($result);
 		
