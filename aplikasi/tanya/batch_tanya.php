@@ -8,6 +8,18 @@ class Batch_Tanya extends Tanya
 		parent::__construct();
 	}
 
+	private function cariApa($fix, $atau, $cariMedan, $cariApa)
+	{
+		$where = null;
+			if ($cariApa==null) 
+				$where .= " $atau`$cariMedan` is null\r";
+			elseif($fix=='x=') 
+				$where .= " $atau`$cariMedan` = '$cariApa'\r";
+			elseif($fix=='xlike') 
+				$where .= " $atau`$cariMedan` like '%$cariApa%'\r";	
+				
+		return $where;
+	}
 	private function dimana($carian)
 	{
 		$where = null;
@@ -21,13 +33,7 @@ class Batch_Tanya extends Tanya
 					  $fix = isset($carian[$key]['fix'])   ? $carian[$key]['fix']        : null;			
 				  $cariApa = isset($carian[$key]['apa'])   ? $carian[$key]['apa']        : null;
 				//echo "\r$key => ($fix) $atau $cariMedan = '$cariApa'  ";
-				
-				if ($cariApa==null) 
-					$where .= " $atau`$cariMedan` is null\r";
-				elseif($fix=='x=') 
-					$where .= " $atau`$cariMedan` = '$cariApa'\r";
-				elseif($fix=='xlike') 
-					$where .= " $atau`$cariMedan` like '%$cariApa%'\r";	
+				$where = $this->cariApa($fix, $atau, $cariMedan, $cariApa);
 			}
 		endif;
 	
@@ -149,7 +155,7 @@ class Batch_Tanya extends Tanya
 			 . $this->dibawah($susun)
 			 . '';
 		
-		echo '<pre>kesBatchAwal:' . htmlentities($sql) . '</pre>';
+		echo '<pre>' . htmlentities($sql) . '</pre>';
 		$result = $this->db->selectAll($sql);
 		
 		return $result;
