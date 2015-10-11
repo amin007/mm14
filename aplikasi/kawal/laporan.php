@@ -472,8 +472,9 @@ class Laporan extends Kawal
 	public function cetakf3kosong($cariBatch, $item = 30, $ms = 1)
 	{
 		# kiraKes dulu
-		$jadual = 'bst15_q1';
-		$carian[] = array('fix'=>'like','atau'=>'WHERE','medan'=>'msic2008','apa'=>null);
+		$jadual = 'bst15_q3';
+		$carian = null;
+		//$carian[] = array('fix'=>'like','atau'=>'WHERE','medan'=>'msic2008','apa'=>null);
 		$bilSemua = $this->tanya->kiraKes($jadual, $medan = '*', $carian);
 		# tentukan bilangan mukasurat. bilangan jumlah rekod
 		//echo '$bilSemua:' . $bilSemua . ', $item:' . $item . ', $ms:' . $ms . '<br>';
@@ -482,8 +483,8 @@ class Laporan extends Kawal
 		$susun[] = array_merge($jum, array('kumpul'=>null, 'susun'=>'nama ASC' ) );
 		# kumpul respon
 		$kumpul = $this->tanya->kumpulRespon('kod','f2','respon',
-			$medan = "concat_ws('',nama,msic2008) nama, concat_ws(' ',kp) as 'sv', "
-				. "utama, newss, concat_ws(' ',msic2008) nota",
+			$medan = "concat_ws('',nama) nama, concat_ws(' ',kp) as 'sv', "
+				. "utama, newss, concat_ws(' msic2008 ','',msic2008) nota",
 			$jadual,$carian,$susun);
 		//echo '<pre>$kumpul:'; print_r($kumpul) . '</pre>';
 		$this->papar->kiraSemuaBaris = $bilSemua;
