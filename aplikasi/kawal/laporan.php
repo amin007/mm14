@@ -369,19 +369,20 @@ class Laporan extends Kawal
 	{
 		# kiraKes dulu
 		//$jadual = 'qss14_q1';
-		$jadual = 'ejob15_q1';
+		$jadual = 'ejob15_q3';
 		$carian[] = array('fix'=>'like','atau'=>'WHERE','medan'=>'fe','apa'=>$cariBatch);
 		$bilSemua = $this->tanya->kiraKes($jadual, $medan = '*', $carian);
 		# tentukan bilangan mukasurat. bilangan jumlah rekod
 		//echo '$bilSemua:' . $bilSemua . ', $item:' . $item . ', $ms:' . $ms . '<br>';
 		$jum = pencamSqlLimit($bilSemua, $item, $ms);
-		$susun[] = array_merge($jum, array('kumpul'=>null, 'susun'=>'kp, nama' ) );
+		$susun[] = array_merge($jum, array('kumpul'=>null, 'susun'=>'respon DESC,kp, nama' ) );
 
 		# kumpul respon
 		$kumpul = $this->tanya->kumpulRespon('kod','f2','respon',
 			//$medan = "concat_ws('<br>Operator:',nama,operator) nama, concat_ws(' ',kp) as 'sv', "
 			$medan = "concat_ws('',nama,operator) nama, concat_ws(' ',kp) as 'sv', "
 				   . "'' utama, newss, '' nota",
+				   //. "'' utama, newss, '<input type=\"checkbox\">' nota",
 			$jadual,$carian,$susun);
 		//echo '<pre>$kumpul:'; print_r($kumpul) . '</pre>';
 		$this->papar->kiraSemuaBaris = $bilSemua;
@@ -435,11 +436,10 @@ class Laporan extends Kawal
 		$this->papar->baca('laporan/f3', 1);
 	}
 
-	public function cetakf3semua($cariBatch, $item = 30, $ms = 1)
+	public function cetakf3ejob($cariBatch, $item = 30, $ms = 1)
 	{
 		# kiraKes dulu
-		//$jadual = 'cdt_pom_baki';
-		$jadual = 'ejob14_q1';
+		$jadual = 'ejob15_q3';
 		$carian[] = array('fix'=>'like','atau'=>'WHERE','medan'=>'batchAwal','apa'=>$cariBatch);
 		$bilSemua = $this->tanya->kiraKes($jadual, $medan = '*', $carian);
 		# tentukan bilangan mukasurat. bilangan jumlah rekod
