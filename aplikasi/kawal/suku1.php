@@ -7,7 +7,6 @@ class Suku1 extends Kawal
 	{
 		parent::__construct();
 		Kebenaran::kawalKeluar();
-		//$this->papar->js = array('ruangtamu/js/default.js');
 		$this->papar->js = array(
 			'bootstrap-transition.js',
 			'bootstrap-alert.js',
