@@ -6,7 +6,7 @@ class Suku1 extends Kawal
 	public function __construct() 
 	{
 		parent::__construct();
-		Kebenaran::kawalKeluar();	
+		Kebenaran::kawalKeluar();
 		//$this->papar->js = array('ruangtamu/js/default.js');
 		$this->papar->js = array(
 			'bootstrap-transition.js',
@@ -31,21 +31,21 @@ class Suku1 extends Kawal
 		$this->_jadual = 'qss14_q1';
 		$this->_medan  = '*';
 	}
-	
+
 	public function index() 
-	{	//echo 'class qss2 fungsi index()<br>';		
-		
+	{	//echo 'class qss2 fungsi index()<br>';
+
 		// papar semua data
 		$this->papar->senaraiData[$this->_jadual] = 
 			$this->tanya->paparIkutSurvey($this->_jadual);
 		$this->papar->medanID ='subsektor';
 		//echo '<pre>$senaraiData->', print_r($this->papar->senaraiData, 1) . '</pre>';# papar $senaraiData
-		
+
 		// Set pemboleubah utama
 		$this->papar->pegawai = senarai_kakitangan();
 		$this->papar->Tajuk_Muka_Surat='MM 2012';
 		$this->papar->cetak='papar';
-		$this->papar->gambar=gambar_latarbelakang('../../');		
+		$this->papar->gambar=gambar_latarbelakang('../../');
 
 		// pergi papar kandungan fungsi papar($this->_folder) dalam KAWAL
 		$fail = Kebenaran::papar($this->_folder);
@@ -54,7 +54,7 @@ class Suku1 extends Kawal
 
 	public function asing($medanID, $cariID, $cetak = 'papar') 
 	{	//echo 'class qss4 fungsi index()<br>';	
-		//echo '$medanID=' . $medanID . ', $cariID=' . $cariID . '<br>';	
+		//echo '$medanID=' . $medanID . ', $cariID=' . $cariID . '<br>';
 		$cari[] = array('fix'=>'x','atau'=>'WHERE',
 			'medan'=>$medanID,'apa'=>$cariID);
 		$susun[] = array('susun'=>'subsektor,newss',
@@ -74,12 +74,12 @@ class Suku1 extends Kawal
 			. '',$cari,$susun);
 		$this->papar->medanID ='newss';
 		//echo '<pre>$senaraiData->', print_r($this->papar->senaraiData, 1) . '</pre>';# papar $senaraiData
-		
+
 		// Set pemboleubah utama
 		$this->papar->cetak = $cetak;
 		$this->papar->pegawai = senarai_kakitangan();
 		$this->papar->Tajuk_Muka_Surat='qss 2014';
-		$this->papar->gambar=gambar_latarbelakang('../../');		
+		$this->papar->gambar=gambar_latarbelakang('../../');
 
 		// pergi papar kandungan fungsi papar($this->_folder) dalam KAWAL
 		$this->papar->baca(Kebenaran::papar($this->_folder), 0);
@@ -112,13 +112,12 @@ class Suku1 extends Kawal
 		# Set pemboleubah utama
         $this->papar->pegawai = senarai_kakitangan();
         $this->papar->lokasi = 'QSS : FE';
-		
-		 # pergi papar kandungan
+
+		# pergi papar kandungan
 		//echo '<br>location: ' . URL . "batchawal/semak/$cariBatch/$dataID" . '';
 		$this->papar->baca('kawalan/cetakf3', 1);
 	}
-	
-		
+
 	public function papar($newss) 
 	{	
 		if ( is_numeric($newss) )
@@ -127,7 +126,7 @@ class Suku1 extends Kawal
 		else
 			$cari[] = array('fix'=>'x','atau'=>'WHERE',
 				'medan'=>'fe','apa'=>'semak');			
-		
+
 		// papar semua data
 		$this->papar->senaraiData[$this->_jadual] = 
 			$this->tanya->paparPOM($this->_jadual, 'newss,nama,po'
@@ -149,12 +148,12 @@ class Suku1 extends Kawal
 		$fail = Kebenaran::papar($this->_folder);
 		$this->papar->baca($fail);
 	}
-	
+
 	public function cari() 
 	{	
 		$jadual['nama'] = $this->_jadual;
 		$senarai = $this->tanya->paparMedan($jadual['nama']);
-		
+
 		# Memilih nama medan dalam jadual berkenaan
 		foreach ($senarai as $key => $medan): #mula ulang $kunci
 			$jadual['medan'][$key] = $medan['Field'];
@@ -179,10 +178,10 @@ class Suku1 extends Kawal
 		/*
 		 * fungsi ini memaparkan hasil carian
 		 */
-		 
+
 		$had = '0, ' . $bil;
 		//echo '<pre>$url->', print_r($url, 1) . '</pre>';
-	
+
 		$kira = pecah_post(); # echo '<pre>$kira->'; print_r($kira); echo '</pre>';
 		// setkan pembolehubah dulu
 		$namajadual = isset($_POST['namajadual']) ? $_POST['namajadual'] : null;
@@ -190,11 +189,11 @@ class Suku1 extends Kawal
 		$carian = isset($_POST['cari']) ? $_POST['cari'] : null;
 		$semak = isset($_POST['cari'][1]) ? $_POST['cari'][1] : null;
 		$this->papar->cariNama = null;
-				
-		if (empty($semak)) 
+
+		if (empty($semak))
 		{
 			header('location:' . URL . 'cari/' . $namajadual . '/1');
-			exit;	
+			exit;
 		}
 		elseif (!empty($namajadual) && $namajadual==$this->_jadual) 
 		{
@@ -222,22 +221,21 @@ class Suku1 extends Kawal
 
 		// pergi papar kandungan
 		$this->papar->baca($this->_folder . 'jumpa');
-
 	}
-	
+
 	function tambah() 
-	{				
+	{
 		$myTable = $this->_jadual;
-		
+
 		// set dalam KAWAL sahaja
 		$paparMedan[$myTable] = $this->tanya->paparMedan($myTable);
 		// dapatkan nama_medan,jenis_medan,input_medan 
 		// dlm class Borang::tambah()
 		Borang::tambah($paparMedan);
-		
+
 		// set dalam LIHAT sahaja
 		$this->papar->paparMedan[$myTable] = $paparMedan[$myTable];
-	
+
 		// Set pemboleubah utama
 		$this->papar->pegawai = senarai_kakitangan();
 		$this->papar->Tajuk_Muka_Surat='MM 2012';
@@ -246,24 +244,24 @@ class Suku1 extends Kawal
 		// pergi papar kandungan
 		$this->papar->baca($this->_folder . 'tambah');
 	}
-	
+
 	public function tambahSimpan() 
-	{	
+	{
 		// semak $_POST dalam class Borang
 		$data = Borang::tambahSimpan($this->_jadual); //echo '<pre>$data:'; print_r($data) . '</pre>';
 		$jadual = $data['namaJadual'];
 		$this->tanya->tambahSimpan($data, $jadual);
-		
+
 		// pergi papar kandungan tambahSimpan() dalam KAWAL
 		Kebenaran::tambahSimpan($this->_folder);
 		//$this->papar->baca($fail);
 	}
-	
+
 	public function ubah($medanID, $cariID, $mesej = null) 
 	{	//echo '$this->tanya->noAhli('.$medanID.'='.$cariID .')<br>';
 
 		$myTable = $this->_jadual;
-		
+
 		// set dalam KAWAL sahaja
 		$cari[] = array('fix'=>'x','atau'=>'WHERE','medan'=>$medanID,'apa'=>$cariID);
 		$noAhli = $this->tanya->cariSatu($myTable, '*', $cari);
@@ -271,23 +269,23 @@ class Suku1 extends Kawal
 
 		// dapatkan nama_medan,jenis_medan,input_medan dlm class Borang::ubah()
 		$this->papar->inputBorang = Borang::ubah($noAhli, $paparMedan, $this->_medan);
-				
+
 		// set dalam LIHAT sahaja
 		$this->papar->paparMedan[$myTable] = $paparMedan[$myTable];
 		$this->papar->noAhli[$myTable][] = $noAhli;
 		$this->papar->medan  = $medanID;
 		$this->papar->cariID = $cariID;
 		$this->papar->mesej = (isset($mesej)) ? $mesej : null;
-				
+
 		// Set pemboleubah utama
 		$this->papar->pegawai = senarai_kakitangan();
 		$this->papar->Tajuk_Muka_Surat='QSS 2014';
 		$this->papar->gambar=gambar_latarbelakang('../../');
 
 		// pergi papar kandungan
-		$this->papar->baca($this->_folder . 'ubah');	
+		$this->papar->baca($this->_folder . 'ubah');
 	}
-	
+
 	public function ubahSimpan($medanID, $cariID)
 	{
 		// semak $_POST dalam class Borang::ubahSimpan($thid->_jadual)
@@ -298,7 +296,7 @@ class Suku1 extends Kawal
 		unset($data['namaJadual']);
 		echo '<pre>$data:'; print_r($data) . '</pre>';
 		#Do your error checking! 
-		
+
 		$semakID = $this->tanya->ubahSimpan($data, $jadual);
 		$pilihID = ($cariID==$semakID) ? $cariID : $semakID;
 		$ID = 'ubah/' . $medanID . '/' . $pilihID . '/berjaya';
@@ -306,9 +304,8 @@ class Suku1 extends Kawal
 		// pergi papar kandungan ubahSimpan($medanID, $cariID) dalam KAWAL
 		Kebenaran::ubahSimpan($this->_folder, $ID);
 		//$this->papar->baca($fail);
-		
 	}
-	
+
 	public function buang($medanID, $cariID)
 	{
 		//echo '$this->tanya->buang('.$medanID.'='.$cariID .')<br>';
@@ -324,7 +321,7 @@ class Suku1 extends Kawal
 	{	//echo '$this->tanya->noAhli('.$medanID.'='.$cariID .')<br>';
 
 		$myTable = $this->_jadual;
-		
+
 		// set dalam KAWAL sahaja
 		$cari['medan'] = $medanID;
 		$cari['id'] = $cariID;
@@ -334,11 +331,11 @@ class Suku1 extends Kawal
 		$medan = '*';
 		$noAhli = $this->tanya->noAhli($myTable, $medan, $cari);
 		$paparMedan[$myTable] = $this->tanya->paparMedan($myTable, $medan);
-		
+
 		// cari dalam prosesan
 		//echo '$nosidap='.$noAhli['nosidap'].'<br>';
 		$rangkaNewss = $this->tanya->cariBanyak('pom_dataekonomi.alamat_newss_2013', 'newss,sidap,nama', array('medan'=>'newss', 'id' => $cariID));
-		
+
 		$jadualProsesan = array('makanan','hartanah','ict','kesihatan','pendidikan','pengangkutan',
 		'penginapan','pentadbiran','profesional','rekreasi');
 		$cari['medan'] = 'daftar_18digit';
@@ -346,16 +343,16 @@ class Suku1 extends Kawal
 		foreach ($jadualProsesan as $key => $jadual):
 			$prosesan['qss_' . $jadual] = $this->tanya->cariBanyak('qss_' . $jadual, '*', $cari);
 		endforeach;
-		
+
 		// semak pembolehubah
 		//echo '<pre>$noAhli:'; print_r($noAhli) . '</pre>';
 		//echo '<pre>$paparMedan:'; print_r($paparMedan) . '</pre>';
 		//echo '<pre>$rangkaNewss:'; print_r($rangkaNewss) . '</pre>';
 		//echo '<pre>$prosesan:'; print_r($prosesan) . '</pre>';		
-		
+
 		// dapatkan nama_medan,jenis_medan,input_medan dlm class Borang::ubah()
 		$this->papar->inputBorang = Borang::ubah($noAhli, $paparMedan, $this->_medan);
-				
+
 		// set dalam LIHAT sahaja
 		$this->papar->paparMedan[$myTable] = $paparMedan[$myTable];
 		$this->papar->cariApa = $prosesan;
@@ -363,7 +360,7 @@ class Suku1 extends Kawal
 		$this->papar->medan  = $medanID;
 		$this->papar->cariID = $cariID;
 		$this->papar->mesej = (isset($mesej)) ? $mesej : null;
-				
+
 		// Set pemboleubah utama
 		$this->papar->pegawai = senarai_kakitangan();
 		$this->papar->Tajuk_Muka_Surat='QSS 2013';
@@ -410,7 +407,6 @@ class Suku1 extends Kawal
 		$filename = $namasyarikat;
 		echo $R->render($type[2], $filename);
 		exit();
-		
 	}
 
-}
+} # tamat class Suku1 extends Kawal 
