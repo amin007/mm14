@@ -118,14 +118,14 @@ class Suku1 extends Kawal
 		$this->papar->baca('kawalan/cetakf3', 1);
 	}
 
-	public function papar($newss) 
+	public function papar($newss)
 	{	
 		if ( is_numeric($newss) )
 			$cari[] = array('fix'=>'x','atau'=>'WHERE',
 				'medan'=>'newss','apa'=>$cariID);
 		else
 			$cari[] = array('fix'=>'x','atau'=>'WHERE',
-				'medan'=>'fe','apa'=>'semak');			
+				'medan'=>'fe','apa'=>'semak');
 
 		# papar semua data
 		$this->papar->senaraiData[$this->_jadual] = 
@@ -223,7 +223,7 @@ class Suku1 extends Kawal
 		$this->papar->baca($this->_folder . 'jumpa');
 	}
 
-	function tambah() 
+	function tambah()
 	{
 		$myTable = $this->_jadual;
 
@@ -233,7 +233,7 @@ class Suku1 extends Kawal
 		# dlm class Borang::tambah()
 		Borang::tambah($paparMedan);
 
-		# set dalam LIHAT sahaja
+		# set dalam PAPAR sahaja
 		$this->papar->paparMedan[$myTable] = $paparMedan[$myTable];
 
 		# Set pemboleubah utama
@@ -270,7 +270,7 @@ class Suku1 extends Kawal
 		# dapatkan nama_medan,jenis_medan,input_medan dlm class Borang::ubah()
 		$this->papar->inputBorang = Borang::ubah($noAhli, $paparMedan, $this->_medan);
 
-		# set dalam LIHAT sahaja
+		# set dalam PAPAR sahaja
 		$this->papar->paparMedan[$myTable] = $paparMedan[$myTable];
 		$this->papar->noAhli[$myTable][] = $noAhli;
 		$this->papar->medan  = $medanID;
@@ -295,12 +295,12 @@ class Suku1 extends Kawal
 			'cariID' => $cariID);
 		unset($data['namaJadual']);
 		echo '<pre>$data:'; print_r($data) . '</pre>';
-		#Do your error checking! 
 
+		# Do your error checking! 
 		$semakID = $this->tanya->ubahSimpan($data, $jadual);
 		$pilihID = ($cariID==$semakID) ? $cariID : $semakID;
-		$ID = 'ubah/' . $medanID . '/' . $pilihID . '/berjaya';
-		//*/
+		$ID = 'ubah/' . $medanID . '/' . $pilihID . '/berjaya'; //*/
+
 		# pergi papar kandungan ubahSimpan($medanID, $cariID) dalam KAWAL
 		Kebenaran::ubahSimpan($this->_folder, $ID);
 		//$this->papar->baca($fail);
@@ -348,12 +348,12 @@ class Suku1 extends Kawal
 		//echo '<pre>$noAhli:'; print_r($noAhli) . '</pre>';
 		//echo '<pre>$paparMedan:'; print_r($paparMedan) . '</pre>';
 		//echo '<pre>$rangkaNewss:'; print_r($rangkaNewss) . '</pre>';
-		//echo '<pre>$prosesan:'; print_r($prosesan) . '</pre>';		
+		//echo '<pre>$prosesan:'; print_r($prosesan) . '</pre>';
 
 		# dapatkan nama_medan,jenis_medan,input_medan dlm class Borang::ubah()
 		$this->papar->inputBorang = Borang::ubah($noAhli, $paparMedan, $this->_medan);
 
-		# set dalam LIHAT sahaja
+		# set dalam PAPAR sahaja
 		$this->papar->paparMedan[$myTable] = $paparMedan[$myTable];
 		$this->papar->cariApa = $prosesan;
 		$this->papar->noAhli[$myTable][] = $noAhli;
@@ -396,7 +396,7 @@ class Suku1 extends Kawal
 
 		# export to excel again
 		$R=new PHPReport($config);
-		$R->load($data); // $data adalah tatasusunan dari pangkalan data
+		$R->load($data); # $data adalah tatasusunan dari pangkalan data
 		//print_r($R);
 		################################################################################
 		# kita boleh setkan fail untuk dimuatturun
