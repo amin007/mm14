@@ -69,7 +69,8 @@ class Suku1 extends Kawal
 			. ',concat_ws(\'&nbsp;&nbsp;&nbsp;\',msic2008,utama) as `msic`'
 			. ',concat_ws(\' \',alamat1,alamat2,poskod,bandar) as `alamat penuh`' 
 			. ',concat_ws(\'-\',fe,respon,catatan_jp_negeri) as keputusan'
-			. ',concat_ws(\'-\',`Untuk Perhatian Pertama Tahunan`,`Telefon Pertama Tahunan`,`Faks Pertama Tahunan`,`E-mel Pertama Tahunan`) as hubungi'
+			. ',concat_ws(\'-\',`Untuk Perhatian Pertama Tahunan`,`Telefon Pertama Tahunan`,'
+			. '`Faks Pertama Tahunan`,`E-mel Pertama Tahunan`) as hubungi'
 			. '',$cari,$susun);
 		$this->papar->medanID ='newss';
 		//echo '<pre>$senaraiData->', print_r($this->papar->senaraiData, 1) . '</pre>';# papar $senaraiData
